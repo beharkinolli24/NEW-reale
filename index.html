@@ -4,49 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <title>TRUST UC - UC PUBG</title>
-    <script src="https://js.stripe.com/v3/"></script>
     <style>
         body { background-color: #0b0f1a; color: white; font-family: Arial, sans-serif; text-align: center; }
-        .logo img { max-width: 200px; margin-top: 20px; }
+        .logo img { max-width: 200px; margin-top: 10px; }
+        .banner img { width: 100%; max-height: 300px; object-fit: cover; }
         .product { margin: 30px auto; padding: 20px; background: #1c2331; width: 80%; border-radius: 10px; }
         .product img { width: 150px; }
-        button { background-color: #0070f3; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-stripe {
+            background-color: #6772e5;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
         .info { max-width: 600px; margin: 50px auto; font-size: 18px; line-height: 1.6; color: #c9d1d9; background-color: #161b22; padding: 20px; border-radius: 10px; }
         a.status-link { color: #58a6ff; text-decoration: underline; }
     </style>
 </head>
 <body>
+    <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
     <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
     <h1>Blej UC për PUBG Mobile</h1>
 
     <div class="product">
         <img src="uc30.png" alt="30 UC">
-        <h2>30 UC - 0.40€</h2>
-        <button onclick="payNow('price_30UC')">Paguaj me kartë</button>
+        <h2>30 UC - 0.55€</h2>
+        <a href="https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000" target="_blank">
+            <button class="btn-stripe">Paguaj me kartë 💳</button>
+        </a>
     </div>
 
     <div class="product">
         <img src="uc60.png" alt="60 UC">
         <h2>60 UC - 0.79€</h2>
-        <button onclick="payNow('price_60UC')">Paguaj me kartë</button>
+        <a href="https://buy.stripe.com/bJe3cveOxaw2afAd4Ygw001" target="_blank">
+            <button class="btn-stripe">Paguaj me kartë 💳</button>
+        </a>
     </div>
 
     <div class="product">
         <img src="uc325.png" alt="325 UC">
         <h2>325 UC - 4.20€</h2>
-        <button onclick="payNow('price_325UC')">Paguaj me kartë</button>
+        <a href="https://buy.stripe.com/28E9ATeOx0Vs4Vg8OIgw002" target="_blank">
+            <button class="btn-stripe">Paguaj me kartë 💳</button>
+        </a>
     </div>
 
     <div class="product">
         <img src="uc660.png" alt="660 UC">
         <h2>660 UC - 8.10€</h2>
-        <button onclick="payNow('price_660UC')">Paguaj me kartë</button>
+        <a href="https://buy.stripe.com/6oU00jcGp33A5Zk9SMgw003" target="_blank">
+            <button class="btn-stripe">Paguaj me kartë 💳</button>
+        </a>
     </div>
 
     <div class="product">
         <img src="uc1800.png" alt="1800 UC">
         <h2>1800 UC - 21.00€</h2>
-        <button onclick="payNow('price_1800UC')">Paguaj me kartë</button>
+        <a href="https://buy.stripe.com/6oUbJ121L7jQ4Vg0icgw004" target="_blank">
+            <button class="btn-stripe">Paguaj me kartë 💳</button>
+        </a>
     </div>
 
     <div class="info">
@@ -56,22 +75,5 @@
         <p>Nëse keni ndonjë pyetje, na shkruani në Instagram ose në email.</p>
         <p>📍 <a class="status-link" href="status.html">Kontrollo Statusin e Porosisë</a></p>
     </div>
-
-    <script>
-        const stripe = Stripe('pk_live_51ReizVHWJyTXi1E4ICjNQV6PmP7YTsdAEAMH6oQmfRAjCSHqKgT7N8ALlam3GdTFLim8Lz0N9c6NNDqMqpkaijWb00kGKSAP3Q');
-
-        function payNow(priceId) {
-            stripe.redirectToCheckout({
-                lineItems: [{ price: priceId, quantity: 1 }],
-                mode: 'payment',
-                successUrl: 'https://trustucshop.tk/success',
-                cancelUrl: 'https://trustucshop.tk/cancel',
-            }).then(function(result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            });
-        }
-    </script>
 </body>
-</html> 
+</html>
