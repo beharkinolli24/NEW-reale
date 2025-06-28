@@ -35,6 +35,7 @@
   <div class="banner"><img src="banner.png" alt="TRUST Top-Up Banner"></div>
   <div class="logo"><img src="logo.png" alt="TRUST Top-Up Logo"></div>
   <h1>Blej Top-Up për PUBG Mobile</h1>
+<div id="confirm" style="color: #0f0; display: none; margin-top: 20px;"></div>
 
   <div class="product">
     <img src="uc30.png" alt="30 Top-Up">
@@ -87,6 +88,7 @@
   
   
   
+  
   <script>
     const stripeLinks = {
       "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
@@ -108,7 +110,7 @@
       const data = {
         pubg_id: pubgId,
         email: "Top-Up " + amount,
-        emri: ""
+        emri: new Date().toLocaleString("sq-AL")
       };
 
       fetch("https://script.google.com/macros/s/AKfycbyIxHtbv1hZ_DsLVcdBl81esmL8OcGOr6soHfu1SsVOeJ7zcRGsc6-xbNtIXxdMZWt_/exec", {
@@ -116,10 +118,17 @@
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
       }).finally(() => {
-        window.location.href = stripeLinks[amount];
+        document.getElementById("confirm").innerText = "✅ Porosia u ruajt. PUBG ID: " + pubgId;
+        document.getElementById("confirm").style.display = "block";
+
+        setTimeout(() => {
+          const redirect = `thankyou.html?id=${pubgId}&paketa=Top-Up ${amount}`;
+          window.location.href = redirect;
+        }, 1000);
       });
     }
   </script>
+
 
 
 
