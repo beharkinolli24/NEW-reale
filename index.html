@@ -85,6 +85,7 @@
   </div>
 
   
+  
   <script>
     const stripeLinks = {
       "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
@@ -97,6 +98,7 @@
     function pay(amount) {
       const input = document.getElementById("pubg" + amount);
       const pubgId = input.value.trim();
+
       if (!pubgId) {
         alert("Ju lutem shkruani PUBG ID tuaj.");
         return;
@@ -111,15 +113,13 @@
       fetch("https://script.google.com/macros/s/AKfycbxWk4SOd3q1tSHw3dw959R4vtozS8LYg3ubG5rh2NHcltFS2aeICtsq3roGsU1pkJngDw/exec", {
         method: "POST",
         body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(() => {
-        const url = stripeLinks[amount];
-        window.open(url, "_blank");
+        headers: { "Content-Type": "application/json" }
+      }).finally(() => {
+        window.location.href = stripeLinks[amount];
       });
     }
   </script>
+
 
 </body>
 </html>
