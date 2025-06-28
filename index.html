@@ -88,7 +88,6 @@
   
   
   
-  
   <script>
     const stripeLinks = {
       "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
@@ -110,25 +109,20 @@
       const data = {
         pubg_id: pubgId,
         email: "Top-Up " + amount,
-        emri: new Date().toLocaleString("sq-AL")
+        emri: ""
       };
 
-      fetch("https://script.google.com/macros/s/AKfycbyIxHtbv1hZ_DsLVcdBl81esmL8OcGOr6soHfu1SsVOeJ7zcRGsc6-xbNtIXxdMZWt_/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwtObh1D9s1mRJdDZJRUha4BSi0EdmPsFaLg_GuwGEcg-aw7TKATuwdkk9zILs6sLmXxA/exec", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
       }).finally(() => {
-        document.getElementById("confirm").innerText = "✅ Porosia u ruajt. PUBG ID: " + pubgId;
-        document.getElementById("confirm").style.display = "block";
-
-        setTimeout(() => {
-          const redirect = `thankyou.html?id=${pubgId}&paketa=Top-Up ${amount}`;
-          window.location.href = redirect;
-        }, 1000);
+      document.getElementById("confirm").innerText = "✅ Porosia u ruajt. PUBG ID: " + pubgId;
+      document.getElementById("confirm").style.display = "block";
+        window.location.href = stripeLinks[amount];
       });
     }
   </script>
-
 
 
 
