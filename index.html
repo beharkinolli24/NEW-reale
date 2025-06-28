@@ -103,8 +103,7 @@
         email: "Top-Up " + amount
       };
 
-      // 1. Ruaj në Google Sheets
-      fetch("https://script.google.com/macros/s/AKfycbyB73PRm3cIvIFQ67KJix5_ROhxUkkEyD9ADwBikNlhmv2b1gCqkuDPvtOFxSQY81tOTA/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxdPrdkfCLUUtDSvCjpXxJNT65as_eqvltA27yunsOwg_BAgeX4RXVy0mzHGft_u6qgmQ/exec", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -113,8 +112,6 @@
       }).then(res => res.text()).then(() => {
         document.getElementById("confirm").innerText = "✅ Porosia u ruajt. PUBG ID: " + pubgId;
         document.getElementById("confirm").style.display = "block";
-
-        // 2. Shko te Stripe
         window.location.href = stripeLinks[amount];
       }).catch(err => {
         alert("Dështoi ruajtja në Google Sheets: " + err);
