@@ -84,6 +84,7 @@
     <p>📍 <a class="status-link" href="status.html">Kontrollo Statusin e Porosisë</a></p>
   </div>
 
+  
   <script>
     const stripeLinks = {
       "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
@@ -100,9 +101,25 @@
         alert("Ju lutem shkruani PUBG ID tuaj.");
         return;
       }
-      const url = stripeLinks[amount] + "?pubgid=" + encodeURIComponent(pubgId);
-      window.open(url, "_blank");
+
+      const data = {
+        pubg_id: pubgId,
+        email: amount + " UC",
+        emri: ""
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbxWk4SOd3q1tSHw3dw959R4vtozS8LYg3ubG5rh2NHcltFS2aeICtsq3roGsU1pkJngDw/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(() => {
+        const url = stripeLinks[amount];
+        window.open(url, "_blank");
+      });
     }
   </script>
+
 </body>
 </html>
