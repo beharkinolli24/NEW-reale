@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TRUST UC - UC PUBG</title>
+  <title>TRUST Top-Up - Top-Up PUBG</title>
   <style>
     body { background-color: #0b0f1a; color: white; font-family: Arial, sans-serif; text-align: center; }
     .logo img { max-width: 200px; margin-top: 10px; }
@@ -32,45 +32,45 @@
   </style>
 </head>
 <body>
-  <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
-  <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
-  <h1>Blej UC për PUBG Mobile</h1>
+  <div class="banner"><img src="banner.png" alt="TRUST Top-Up Banner"></div>
+  <div class="logo"><img src="logo.png" alt="TRUST Top-Up Logo"></div>
+  <h1>Blej Top-Up për PUBG Mobile</h1>
 
   <div class="product">
-    <img src="uc30.png" alt="30 UC">
-    <h2>30 UC - 0.55€</h2>
+    <img src="uc30.png" alt="30 Top-Up">
+    <h2>30 Top-Up - 0.55€</h2>
     <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID">
     <br><br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
-    <img src="uc60.png" alt="60 UC">
-    <h2>60 UC - 0.79€</h2>
+    <img src="uc60.png" alt="60 Top-Up">
+    <h2>60 Top-Up - 0.79€</h2>
     <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID">
     <br><br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
-    <img src="uc325.png" alt="325 UC">
-    <h2>325 UC - 4.20€</h2>
+    <img src="uc325.png" alt="325 Top-Up">
+    <h2>325 Top-Up - 4.20€</h2>
     <input type="text" id="pubg325" placeholder="Shkruaj PUBG ID">
     <br><br>
     <button class="btn-stripe" onclick="pay('325')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
-    <img src="uc660.png" alt="660 UC">
-    <h2>660 UC - 8.10€</h2>
+    <img src="uc660.png" alt="660 Top-Up">
+    <h2>660 Top-Up - 8.10€</h2>
     <input type="text" id="pubg660" placeholder="Shkruaj PUBG ID">
     <br><br>
     <button class="btn-stripe" onclick="pay('660')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
-    <img src="uc1800.png" alt="1800 UC">
-    <h2>1800 UC - 21.00€</h2>
+    <img src="uc1800.png" alt="1800 Top-Up">
+    <h2>1800 Top-Up - 21.00€</h2>
     <input type="text" id="pubg1800" placeholder="Shkruaj PUBG ID">
     <br><br>
     <button class="btn-stripe" onclick="pay('1800')">Paguaj me kartë 💳</button>
@@ -79,11 +79,12 @@
   <div class="info">
     <h2>📦 Si funksionon porosia?</h2>
     <p>Pasi të kryeni pagesën me kartë, porosia juaj do të përpunohet brenda <strong>5-20 minutave</strong>.</p>
-    <p>UC do të dërgohet në llogarinë tuaj PUBG Mobile sipas të dhënave që keni dhënë në porosi.</p>
+    <p>Top-Up do të dërgohet në llogarinë tuaj PUBG Mobile sipas të dhënave që keni dhënë në porosi.</p>
     <p>Nëse keni ndonjë pyetje, na shkruani në Instagram ose në email.</p>
     <p>📍 <a class="status-link" href="status.html">Kontrollo Statusin e Porosisë</a></p>
   </div>
 
+  
   
   
   <script>
@@ -100,13 +101,13 @@
       const pubgId = input.value.trim();
 
       if (!pubgId) {
-        alert("Ju lutem shkruani PUBG ID tuaj.");
+        alert("Ju lutem shkruani ID-në tuaj.");
         return;
       }
 
       const data = {
         pubg_id: pubgId,
-        email: amount + " UC",
+        email: "Top-Up " + amount,
         emri: ""
       };
 
@@ -119,6 +120,7 @@
       });
     }
   </script>
+
 
 
 </body>
