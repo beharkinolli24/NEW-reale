@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faleminderit për Porosinë</title>
+  <style>
+    body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; text-align: center; padding: 50px; }
+    .card { background: #161b22; padding: 20px; border-radius: 10px; display: inline-block; }
+    h1 { color: #58a6ff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>✅ Faleminderit!</h1>
+    <p>Porosia u ruajt me sukses.</p>
+    <p><strong>ID juaj PUBG:</strong> <span id="pubgId"></span></p>
+    <p>Paketa: <span id="paketa"></span></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("pubgId").innerText = params.get("id") || "e panjohur";
+    document.getElementById("paketa").innerText = params.get("paketa") || "e panjohur";
+  </script>
+</body>
+</html>

@@ -2,64 +2,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Statusi i Porosisë | TRUST UC</title>
-    <style>
-        body {
-            background-color: #0d1117;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            margin: 10px;
-        }
-        input {
-            width: 300px;
-        }
-        button {
-            background-color: #1f6feb;
-            color: white;
-            cursor: pointer;
-        }
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #58a6ff;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Statusi i Porosisë</title>
+  <style>
+    body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; text-align: center; padding: 40px; }
+    .card { background: #161b22; padding: 20px; border-radius: 10px; display: inline-block; max-width: 500px; margin: auto; }
+    input { padding: 10px; border-radius: 5px; width: 80%; margin-top: 10px; }
+    button { padding: 10px 20px; background: #238636; color: white; border: none; border-radius: 5px; margin-top: 10px; cursor: pointer; }
+    .result { margin-top: 20px; color: #58a6ff; }
+  </style>
 </head>
 <body>
-    <h1>Statusi i Porosisë</h1>
-    <p>Shkruaj ID e porosisë për të kontrolluar statusin:</p>
-    <input type="text" id="orderId" placeholder="Vendos ID e porosisë">
+  <div class="card">
+    <h1>Kontrollo Statusin e Porosisë</h1>
+    <input type="text" id="searchId" placeholder="Shkruaj PUBG ID">
+    <br>
     <button onclick="checkStatus()">Kontrollo</button>
-    <div id="result"></div>
+    <div class="result" id="result"></div>
+  </div>
 
-    <script>
-        function checkStatus() {
-            var orderId = document.getElementById('orderId').value.trim();
-            var result = document.getElementById('result');
-            
-            if (orderId === "") {
-                result.innerHTML = "Ju lutem vendosni një ID.";
-                return;
-            }
+  <script>
+    function checkStatus() {
+      const id = document.getElementById("searchId").value.trim();
+      if (!id) {
+        document.getElementById("result").innerText = "Ju lutem shkruani ID-në tuaj.";
+        return;
+      }
 
-            // Simulim statusesh për shembull
-            if (orderId === "12345") {
-                result.innerHTML = "Statusi: Porosia është përfunduar dhe UC janë dërguar.";
-            } else if (orderId === "67890") {
-                result.innerHTML = "Statusi: Në proces. UC do të dërgohen së shpejti.";
-            } else {
-                result.innerHTML = "Statusi: Nuk u gjet asnjë porosi me këtë ID.";
-            }
-        }
-    </script>
+      fetch("https://opensheet.elk.sh/1aKDoOM5ucQ4M74T2Tam_7pu78OESrzazIm39Tl5YqOI/Sheet1")
+        .then(res => res.json())
+        .then(data => {
+          const entry = data.reverse().find(row => row.pubg_id === id);
+          if (entry) {
+            document.getElementById("result").innerHTML = `
+              ✅ Gjetur!<br>
+              PUBG ID: ${entry.pubg_id}<br>
+              Paketa: ${entry.email}<br>
+              Data: ${entry.emri || "nuk u përcaktua"}
+            `;
+          } else {
+            document.getElementById("result").innerText = "Nuk u gjet asnjë porosi me këtë ID.";
+          }
+        });
+    }
+  </script>
 </body>
 </html>
