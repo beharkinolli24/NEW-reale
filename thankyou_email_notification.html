@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faleminderit për pagesën</title>
+  <style>
+    body { background-color: #0b0f1a; color: white; font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+    h1 { color: #4caf50; }
+    p { font-size: 18px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>✅ Pagesa u krye me sukses!</h1>
+  <p>Po ruajmë të dhënat tuaja…</p>
+  <p id="status"></p>
+
+  <script>
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const pubgId = getQueryParam("pubg_id");
+    const pack = getQueryParam("paketa");
+
+    if (pubgId && pack) {
+      const data = {
+        pubg_id: pubgId,
+        paketa: pack,
+        status: "Paguar"
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbztZkyAFH6hpIM1HShGCzGlpx-gFNf7PWSUI6xeTSZtxC79Mdrmx_5qI8lq9qPiyVKGgQ/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(text => {
+        document.getElementById("status").innerText = "✅ Të dhënat u ruajtën dhe njoftimi u dërgua me sukses.";
+      })
+      .catch(err => {
+        document.getElementById("status").innerText = "❌ Dështoi ruajtja: " + err;
+      });
+    } else {
+      document.getElementById("status").innerText = "❌ Nuk u gjetën të dhënat në URL.";
+    }
+  </script>
+</body>
+</html>
