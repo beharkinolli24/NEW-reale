@@ -3,9 +3,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TRUST UC - Top-Up PUBG</title>
+  <title>TRUST UC - UC PUBG</title>
   <style>
-    body { background-color: #0b0f1a; color: white; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    body { background-color: #0b0f1a; color: white; font-family: Arial, sans-serif; text-align: center; }
     .logo img { max-width: 200px; margin-top: 10px; }
     .banner img { width: 100%; max-height: 300px; object-fit: cover; }
     .product { margin: 30px auto; padding: 20px; background: #1c2331; width: 80%; border-radius: 10px; }
@@ -29,48 +29,50 @@
     }
     .info { max-width: 600px; margin: 50px auto; font-size: 18px; line-height: 1.6; color: #c9d1d9; background-color: #161b22; padding: 20px; border-radius: 10px; }
     a.status-link { color: #58a6ff; text-decoration: underline; }
-    #confirm { color: #0f0; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <div class="banner"><img src="banner.png" alt="TRUST Top-Up Banner"></div>
-  <div class="logo"><img src="logo.png" alt="TRUST Top-Up Logo"></div>
-  <h1>Blej Top-Up për PUBG Mobile</h1>
-  <div id="confirm" style="display: none;"></div>
+  <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
+  <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
+  <h1>Blej UC për PUBG Mobile</h1>
 
-  <!-- Products -->
   <div class="product">
     <img src="uc30.png" alt="30 UC">
     <h2>30 UC - 0.55€</h2>
-    <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID"><br><br>
+    <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID">
+    <br><br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
     <img src="uc60.png" alt="60 UC">
     <h2>60 UC - 0.79€</h2>
-    <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID"><br><br>
+    <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID">
+    <br><br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
     <img src="uc325.png" alt="325 UC">
     <h2>325 UC - 4.20€</h2>
-    <input type="text" id="pubg325" placeholder="Shkruaj PUBG ID"><br><br>
+    <input type="text" id="pubg325" placeholder="Shkruaj PUBG ID">
+    <br><br>
     <button class="btn-stripe" onclick="pay('325')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
     <img src="uc660.png" alt="660 UC">
     <h2>660 UC - 8.10€</h2>
-    <input type="text" id="pubg660" placeholder="Shkruaj PUBG ID"><br><br>
+    <input type="text" id="pubg660" placeholder="Shkruaj PUBG ID">
+    <br><br>
     <button class="btn-stripe" onclick="pay('660')">Paguaj me kartë 💳</button>
   </div>
 
   <div class="product">
     <img src="uc1800.png" alt="1800 UC">
     <h2>1800 UC - 21.00€</h2>
-    <input type="text" id="pubg1800" placeholder="Shkruaj PUBG ID"><br><br>
+    <input type="text" id="pubg1800" placeholder="Shkruaj PUBG ID">
+    <br><br>
     <button class="btn-stripe" onclick="pay('1800')">Paguaj me kartë 💳</button>
   </div>
 
@@ -92,29 +94,25 @@
     };
 
     function pay(amount) {
-      const pubgId = document.getElementById("pubg" + amount).value.trim();
+      const input = document.getElementById("pubg" + amount);
+      const pubgId = input.value.trim();
       if (!pubgId) {
-        alert("Ju lutem shkruani ID-në tuaj.");
+        alert("Ju lutem shkruani PUBG ID tuaj.");
         return;
       }
 
-      const data = {
-        pubg_id: pubgId,
-        email: "Top-Up " + amount
-      };
+      const data = { pubg_id: pubgId };
 
-      fetch("https://script.google.com/macros/s/AKfycbxdPrdkfCLUUtDSvCjpXxJNT65as_eqvltA27yunsOwg_BAgeX4RXVy0mzHGft_u6qgmQ/exec", {
+      // Ruaje në Google Sheets përpara se të shkoj në Stripe
+      fetch("https://script.google.com/macros/s/AKfycbztZkyAFH6hpIM1HShGCzGlpx-gFNf7PWSUI6xeTSZtxC79Mdrmx_5qI8lq9qPiyVKGgQ/exec", {
         method: "POST",
         body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(res => res.text()).then(() => {
-        document.getElementById("confirm").innerText = "✅ Porosia u ruajt. PUBG ID: " + pubgId;
-        document.getElementById("confirm").style.display = "block";
-        window.location.href = stripeLinks[amount];
-      }).catch(err => {
-        alert("Dështoi ruajtja në Google Sheets: " + err);
+        headers: { "Content-Type": "application/json" }
+      }).then(() => {
+        const url = stripeLinks[amount] + "?pubgid=" + encodeURIComponent(pubgId);
+        window.open(url, "_blank");
+      }).catch((err) => {
+        alert("❌ Gabim gjatë ruajtjes në Google Sheets: " + err);
       });
     }
   </script>
