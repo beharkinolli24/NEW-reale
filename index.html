@@ -191,22 +191,26 @@
 
 
 <style>
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-  margin-top: 30px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.mySlides {
+.side-slideshow {
+  position: fixed;
+  right: 10px;
+  top: 120px;
+  width: 180px;
+  z-index: 1000;
   display: none;
 }
-.mySlides img {
+@media (min-width: 1024px) {
+  .side-slideshow {
+    display: block;
+  }
+}
+.side-slideshow .slide-img {
+  display: none;
+}
+.side-slideshow .slide-img img {
   width: 100%;
-  height: auto;
   border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 </style>
 
@@ -221,19 +225,6 @@
   <h1>🎮 TRUST UC</h1>
   <p>Bli UC për PUBG Mobile me çmimet më të mira dhe shpejtësi maksimale!</p>
 </header>
-
-<div class="slideshow-container">
-  <div class="mySlides fade">
-    <img src="banner_1.png" style="width:100%">
-  </div>
-  <div class="mySlides fade">
-    <img src="banner_2.png" style="width:100%">
-  </div>
-  <div class="mySlides fade">
-    <img src="banner_3.png" style="width:100%">
-  </div>
-</div>
-
 
   <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
   <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
@@ -416,18 +407,24 @@
 
 
 
+<div class="side-slideshow">
+  <div class="slide-img"><img src="banner_1.png" /></div>
+  <div class="slide-img"><img src="banner_2.png" /></div>
+  <div class="slide-img"><img src="banner_3.png" /></div>
+</div>
+
 <script>
-let slideIndex = 0;
-showSlides();
-function showSlides() {
-  let slides = document.getElementsByClassName("mySlides");
+let sideIndex = 0;
+showSideSlides();
+function showSideSlides() {
+  const slides = document.getElementsByClassName("slide-img");
   for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
+    slides[i].style.display = "none";
   }
-  slideIndex++;
-  if (slideIndex > slides.length) { slideIndex = 1 }    
-  slides[slideIndex - 1].style.display = "block";  
-  setTimeout(showSlides, 4000);
+  sideIndex++;
+  if (sideIndex > slides.length) { sideIndex = 1 }
+  slides[sideIndex - 1].style.display = "block";
+  setTimeout(showSideSlides, 4000);
 }
 </script>
 
