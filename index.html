@@ -41,6 +41,16 @@
     <h2>30 UC - 0.55€</h2>
     <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="item_name" value="30 UC">
+  <input type="hidden" name="amount" value="0.55">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
+  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
+</form>
+
   </div>
 
   <div class="product">
@@ -48,6 +58,16 @@
     <h2>60 UC - 0.79€</h2>
     <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="item_name" value="60 UC">
+  <input type="hidden" name="amount" value="0.79">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
+  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
+</form>
+
   </div>
 
   <div class="product">
@@ -55,6 +75,16 @@
     <h2>325 UC - 4.20€</h2>
     <input type="text" id="pubg325" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('325')">Paguaj me kartë 💳</button>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="item_name" value="325 UC">
+  <input type="hidden" name="amount" value="4.20">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
+  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
+</form>
+
   </div>
 
   <div class="product">
@@ -62,6 +92,16 @@
     <h2>660 UC - 8.10€</h2>
     <input type="text" id="pubg660" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('660')">Paguaj me kartë 💳</button>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="item_name" value="660 UC">
+  <input type="hidden" name="amount" value="8.10">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
+  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
+</form>
+
   </div>
 
   <div class="product">
@@ -69,6 +109,16 @@
     <h2>1800 UC - 21.00€</h2>
     <input type="text" id="pubg1800" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('1800')">Paguaj me kartë 💳</button>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="item_name" value="1800 UC">
+  <input type="hidden" name="amount" value="21.00">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
+  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
+</form>
+
   </div>
 
   <script>
@@ -106,5 +156,32 @@
       });
     }
   </script>
+
+<script>
+function ruajPorosi(method) {
+  const id = document.querySelector('input[name="pubg_id"]').value;
+  const selected = document.querySelector('select[name="package"]').value;
+  const [paketa, amount] = selected.split('|');
+
+  const data = {
+    pubg_id: id,
+    paketa: paketa,
+    amount: amount,
+    method: method,
+    status: "Pending"
+  };
+
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyPk7Pk34YVNphtuMVbOj545iulKEqAVDuunvTAQ97YAobADXwRoBhHwFMrslPIA1xmOA/exec"; // ZËVENDËSO KËTË ME LINKUN TËND
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  }).then(() => {
+    console.log("✅ Porosia u ruajt në Sheets.");
+  }).catch((err) => console.error("❌ Gabim:", err));
+}
+</script>
+
 </body>
 </html>
