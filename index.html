@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<meta name="description" content="TRUST UC - Bli UC për PUBG me çmimet më të mira në Shqipëri. Pagesë e sigurt me PayPal ose kartë. Dorëzim brenda 15 minutave.">
+<meta name="keywords" content="PUBG UC Shqipëri, UC me PayPal, Trust UC, Bli UC me kartë, UC për PUBG Mobile, UC ofertë 2025">
+<meta name="author" content="TRUST UC">
+
   <meta charset="UTF-8">
   <title>TRUST UC - UC PUBG</title>
   <style>
@@ -29,8 +34,154 @@
     }
     #confirm { margin-top: 20px; color: #0f0; }
   </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f9ff;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background: linear-gradient(135deg, #2e89ff, #174ea6);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2.5em;
+  }
+
+  section {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .section-title {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2e89ff;
+  }
+
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .btn-stripe, .btn-paypal {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .btn-stripe {
+    background-color: #2e89ff;
+    color: white;
+  }
+
+  .btn-paypal {
+    background-color: #ffc439;
+    color: black;
+  }
+
+  footer {
+    background: #2e89ff;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+  }
+</style>
+
+<style>
+  .side-banner {
+    position: fixed;
+    right: 0;
+    top: 100px;
+    width: 160px;
+    z-index: 10;
+    display: none;
+  }
+
+  .side-banner img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  }
+
+  @media (min-width: 1024px) {
+    .side-banner { display: block; }
+  }
+</style>
+
+
+<style>
+  .testimonial-box {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  .testimonial-box p {
+    font-style: italic;
+    margin: 0;
+  }
+
+  .contact-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #2e89ff;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 999;
+  }
+
+  .contact-button:hover {
+    background-color: #1c6dd0;
+  }
+</style>
+
+
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').then(function() {
+      console.log("✅ Service Worker i regjistruar");
+    });
+  }
+</script>
+
 </head>
 <body>
+
+<div class="side-banner">
+  <img src="https://i.imgur.com/w1Hp5c2.png" alt="UC Offer">
+</div>
+
+<header>
+  <h1>🎮 TRUST UC</h1>
+  <p>Bli UC për PUBG Mobile me çmimet më të mira dhe shpejtësi maksimale!</p>
+</header>
+
   <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
   <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
   <h1>Bli UC për PUBG Mobile</h1>
@@ -41,16 +192,6 @@
     <h2>30 UC - 0.55€</h2>
     <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
-  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
-  <input type="hidden" name="cmd" value="_xclick">
-  <input type="hidden" name="item_name" value="30 UC">
-  <input type="hidden" name="amount" value="0.55">
-  <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
-  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
-</form>
-
   </div>
 
   <div class="product">
@@ -58,16 +199,6 @@
     <h2>60 UC - 0.79€</h2>
     <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
-  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
-  <input type="hidden" name="cmd" value="_xclick">
-  <input type="hidden" name="item_name" value="60 UC">
-  <input type="hidden" name="amount" value="0.79">
-  <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
-  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
-</form>
-
   </div>
 
   <div class="product">
@@ -75,16 +206,6 @@
     <h2>325 UC - 4.20€</h2>
     <input type="text" id="pubg325" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('325')">Paguaj me kartë 💳</button>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
-  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
-  <input type="hidden" name="cmd" value="_xclick">
-  <input type="hidden" name="item_name" value="325 UC">
-  <input type="hidden" name="amount" value="4.20">
-  <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
-  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
-</form>
-
   </div>
 
   <div class="product">
@@ -92,16 +213,6 @@
     <h2>660 UC - 8.10€</h2>
     <input type="text" id="pubg660" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('660')">Paguaj me kartë 💳</button>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
-  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
-  <input type="hidden" name="cmd" value="_xclick">
-  <input type="hidden" name="item_name" value="660 UC">
-  <input type="hidden" name="amount" value="8.10">
-  <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
-  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
-</form>
-
   </div>
 
   <div class="product">
@@ -109,16 +220,6 @@
     <h2>1800 UC - 21.00€</h2>
     <input type="text" id="pubg1800" placeholder="Shkruaj PUBG ID"><br><br>
     <button class="btn-stripe" onclick="pay('1800')">Paguaj me kartë 💳</button>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="margin-top: 10px;">
-  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
-  <input type="hidden" name="cmd" value="_xclick">
-  <input type="hidden" name="item_name" value="1800 UC">
-  <input type="hidden" name="amount" value="21.00">
-  <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="return" value="https://trustuc.netlify.app/order_success.html">
-  <input type="submit" value="🟨 Paguaj me PayPal" style="padding:10px 20px; background:#ffc439; border:none; border-radius:6px; font-size:16px; cursor:pointer;">
-</form>
-
   </div>
 
   <script>
@@ -157,31 +258,60 @@
     }
   </script>
 
-<script>
-function ruajPorosi(method) {
-  const id = document.querySelector('input[name="pubg_id"]').value;
-  const selected = document.querySelector('select[name="package"]').value;
-  const [paketa, amount] = selected.split('|');
+<footer>
+  <p>© 2025 TRUST UC | Të gjitha të drejtat e rezervuara</p>
 
-  const data = {
-    pubg_id: id,
-    paketa: paketa,
-    amount: amount,
-    method: method,
-    status: "Pending"
-  };
+<section id="eventet">
+  <div class="section-title">🎮 Evente & Oferta Speciale</div>
+  <div class="info-grid">
+    <div><p>🔥 325 UC vetëm €3.80 deri të dielën!</p></div>
+    <div><p>🎁 UC bonus për blerje mbi 1000 UC këtë javë</p></div>
+    <div><p>⏳ Event i ri PUBG: Classic Crate Spin në zbritje</p></div>
+  </div>
+</section>
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyPk7Pk34YVNphtuMVbOj545iulKEqAVDuunvTAQ97YAobADXwRoBhHwFMrslPIA1xmOA/exec"; // ZËVENDËSO KËTË ME LINKUN TËND
+<section id="rekomandime">
+  <div class="section-title">🗨️ Çfarë thonë klientët tanë</div>
+  <div class="testimonial-box">
+    <p>“UC për 5 minuta, super shërbim!”</p>
+  </div>
+  <div class="testimonial-box">
+    <p>“Paguajta me PayPal, çdo gjë perfekte 👌”</p>
+  </div>
+  <div class="testimonial-box">
+    <p>“100% e sigurt, do blej përsëri!”</p>
+  </div>
+</section>
 
-  fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-  }).then(() => {
-    console.log("✅ Porosia u ruajt në Sheets.");
-  }).catch((err) => console.error("❌ Gabim:", err));
-}
-</script>
+<section id="rrethnesh">
+  <div class="section-title">ℹ️ Rreth Nesh</div>
+  <p style="text-align:center;">TRUST UC është një platformë shqiptare që ofron blerje të sigurta të UC për PUBG Mobile me çmimet më të mira dhe dorëzim brenda 15 minutave. Ne garantojmë pagesa të sigurta dhe shërbim korrekt për çdo klient.</p>
+</section>
+
+
+<section id="faq">
+  <div class="section-title">❓ Pyetje të shpeshta (FAQ)</div>
+  <div class="testimonial-box">
+    <p><strong>Sa kohë zgjat dergimi i UC?</strong><br>UC zakonisht dërgohet brenda 15 deri në 30 minuta pas pagesës.</p>
+  </div>
+  <div class="testimonial-box">
+    <p><strong>A është e sigurt të paguaj me kartë ose PayPal?</strong><br>Po! TRUST UC përdor Stripe dhe PayPal – platformat më të sigurta të pagesës online.</p>
+  </div>
+  <div class="testimonial-box">
+    <p><strong>Si mund të kontaktoj nëse kam pyetje?</strong><br>Na shkruani në Instagram: <a href="https://instagram.com/trustuc" target="_blank">@trustuc</a></p>
+  </div>
+  <div class="testimonial-box">
+    <p><strong>A më duhen të dhëna të tjera përveç PUBG ID?</strong><br>Jo. Mjafton të vendosni saktë PUBG ID dhe të zgjidhni paketën që dëshironi.</p>
+  </div>
+  <div class="testimonial-box">
+    <p><strong>Çfarë ndodh nëse e vendos ID-n gabim?</strong><br>Nëse porosia nuk është dërguar ende, kontakto menjëherë në Instagram për korrigjim.</p>
+  </div>
+</section>
+
+</footer>
+
+<a class="contact-button" href="https://instagram.com/trustuc" target="_blank">📩 Na Kontakto</a>
 
 </body>
+
 </html>

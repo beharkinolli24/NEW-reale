@@ -2,49 +2,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Statusi i Porosisë</title>
-  <style>
-    body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; text-align: center; padding: 40px; }
-    .card { background: #161b22; padding: 20px; border-radius: 10px; display: inline-block; max-width: 500px; margin: auto; }
-    input { padding: 10px; border-radius: 5px; width: 80%; margin-top: 10px; }
-    button { padding: 10px 20px; background: #238636; color: white; border: none; border-radius: 5px; margin-top: 10px; cursor: pointer; }
-    .result { margin-top: 20px; color: #58a6ff; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Kontrollo Statusin e Porosisë</title>
+    <style>
+        body { font-family: Arial; text-align: center; background: #eef1f5; padding: 50px; }
+        .box { background: white; padding: 30px; border-radius: 10px; width: 400px; margin: auto; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+        input, button { padding: 12px; width: 90%; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+        button { background: #2e89ff; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 15px; font-size: 16px; color: #333; }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Kontrollo Statusin e Porosisë</h1>
-    <input type="text" id="searchId" placeholder="Shkruaj PUBG ID">
-    <br>
-    <button onclick="checkStatus()">Kontrollo</button>
-    <div class="result" id="result"></div>
-  </div>
+    <div class="box">
+        <h2>🔍 Kontrollo Statusin e Porosisë</h2>
+        <input type="text" id="pubgIdInput" placeholder="Shkruaj PUBG ID">
+        <button onclick="checkStatus()">Kërko</button>
+        <div id="result"></div>
+    </div>
 
-  <script>
-    function checkStatus() {
-      const id = document.getElementById("searchId").value.trim();
-      if (!id) {
-        document.getElementById("result").innerText = "Ju lutem shkruani ID-në tuaj.";
-        return;
-      }
+    <script>
+        async function checkStatus() {
+            const pubgId = document.getElementById('pubgIdInput').value.trim();
+            const resultBox = document.getElementById('result');
+            if (!pubgId) {
+                resultBox.textContent = "Ju lutem futni një PUBG ID.";
+                return;
+            }
 
-      fetch("https://opensheet.elk.sh/1aKDoOM5ucQ4M74T2Tam_7pu78OESrzazIm39Tl5YqOI/Sheet1")
-        .then(res => res.json())
-        .then(data => {
-          const entry = data.reverse().find(row => row.pubg_id === id);
-          if (entry) {
-            document.getElementById("result").innerHTML = `
-              ✅ Gjetur!<br>
-              PUBG ID: ${entry.pubg_id}<br>
-              Paketa: ${entry.email}<br>
-              Data: ${entry.emri || "nuk u përcaktua"}
-            `;
-          } else {
-            document.getElementById("result").innerText = "Nuk u gjet asnjë porosi me këtë ID.";
-          }
-        });
-    }
-  </script>
+            resultBox.textContent = "Po kërkojmë...";
+
+            try {
+                const res = await fetch("https://script.google.com/macros/s/AKfycbyPk7Pk34YVNphtuMVbOj545iulKEqAVDuunvTAQ97YAobADXwRoBhHwFMrslPIA1xmOA/exec?pubg_id=" + encodeURIComponent(pubgId));
+                const data = await res.json();
+
+                if (data && data.status) {
+                    resultBox.innerHTML = `<b>Statusi:</b> ${data.status} <br> <b>Paketa:</b> ${data.paketa}`;
+                } else {
+                    resultBox.textContent = "Nuk u gjet asnjë porosi me këtë ID.";
+                }
+            } catch (error) {
+                resultBox.textContent = "Gabim gjatë kërkimit të statusit.";
+            }
+        }
+    </script>
 </body>
 </html>
