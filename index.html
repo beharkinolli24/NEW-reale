@@ -189,6 +189,27 @@
   }
 </style>
 
+
+<style>
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+  margin-top: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.mySlides {
+  display: none;
+}
+.mySlides img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+</style>
+
 </head>
 <body>
 
@@ -200,6 +221,19 @@
   <h1>🎮 TRUST UC</h1>
   <p>Bli UC për PUBG Mobile me çmimet më të mira dhe shpejtësi maksimale!</p>
 </header>
+
+<div class="slideshow-container">
+  <div class="mySlides fade">
+    <img src="banner_1.png" style="width:100%">
+  </div>
+  <div class="mySlides fade">
+    <img src="banner_2.png" style="width:100%">
+  </div>
+  <div class="mySlides fade">
+    <img src="banner_3.png" style="width:100%">
+  </div>
+</div>
+
 
   <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
   <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
@@ -380,6 +414,22 @@
 </footer>
 
 
+
+
+<script>
+let slideIndex = 0;
+showSlides();
+function showSlides() {
+  let slides = document.getElementsByClassName("mySlides");
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) { slideIndex = 1 }    
+  slides[slideIndex - 1].style.display = "block";  
+  setTimeout(showSlides, 4000);
+}
+</script>
 
 </body>
 
