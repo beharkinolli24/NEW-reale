@@ -407,17 +407,21 @@
         paketa: "Top-Up " + amount + " UC"
       };
 
-      fetch("https://trustuc-proxy.onrender.com/submit", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      }).then(() => {
-        document.getElementById("confirm").innerText = "✅ U ruajt me sukses. Po kaloni në pagesë...";
-        setTimeout(() => {
-          window.location.href = stripeLinks[amount];
-        }, 1500);
-      }).catch((err) => {
-        alert("❌ Dështoi ruajtja: " + err);
+      fetch("https://script.google.com/macros/s/AKfycbyPk7Pk34YVNphtuMVbOj545iulKEqAVDuunvTAQ97YAobADXwRoBhHwFMrslPIA1xmOA/exec", {
+  method: "POST",
+  body: JSON.stringify(data),
+  headers: { "Content-Type": "application/json" }
+})
+.then(() => {
+  document.getElementById("confirm").innerText = "✅ U ruajt me sukses. Po kaloni në pagesë...";
+  setTimeout(() => {
+    window.location.href = stripeLinks[amount];
+  }, 1500);
+})
+.catch((err) => {
+  alert("❌ Dështoi ruajtja: " + err);
+});
+
       });
     }
   </script>
