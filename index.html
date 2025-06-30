@@ -414,7 +414,8 @@
       }).then(() => {
         document.getElementById("confirm").innerText = "✅ U ruajt me sukses. Po kaloni në pagesë...";
         setTimeout(() => {
-          window.location.href = stripeLinks[amount];
+          await sendUC(pubgId, amount);
+  window.location.href = stripeLinks[amount];
         }, 1500);
       }).catch((err) => {
         alert("❌ Dështoi ruajtja: " + err);
@@ -549,6 +550,47 @@ function rotateSlides() {
       <button type="submit">Dërgo Porosinë</button>
     </form>
 </section>
+
+
+<script>
+async function sendUC(pubgId, ucAmount) {
+  const spuMap = {
+    "30": 123456789,
+    "60": 184566477,
+    "325": 184566478,
+    "660": 184566479,
+    "1800": 184566480
+  };
+
+  const order = {
+    spuId: spuMap[ucAmount],
+    gameAccountInfo: {
+      account: pubgId,
+      roleName: "TRUSTUC"
+    },
+    quantity: 1,
+    externalOrderNumber: "trustuc-" + Date.now(),
+    buyerRemark: ucAmount + " UC Auto",
+    region: "GLOBAL"
+  };
+
+  const res = await fetch("https://openapi.u7buy.com/open-api/game_service_order/create_order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Basic YWJwMTIzOm15U2VjcmV0"
+    },
+    body: JSON.stringify(order)
+  });
+
+  const data = await res.json();
+  if (data.code === "000000") {
+    alert("✅ UC u dërgua me sukses!");
+  } else {
+    alert("❌ Dështoi dërgimi i UC: " + data.message);
+  }
+}
+</script>
 
 </body>
 
