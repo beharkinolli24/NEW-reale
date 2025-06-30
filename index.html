@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <meta name="description" content="TRUST UC - Bli UC për PUBG me çmimet më të mira në Shqipëri. Pagesë e sigurt me PayPal ose kartë. Dorëzim brenda 15 minutave.">
 <meta name="keywords" content="PUBG UC Shqipëri, UC me PayPal, Trust UC, Bli UC me kartë, UC për PUBG Mobile, UC ofertë 2025">
@@ -214,6 +215,62 @@
 }
 </style>
 
+
+<style>
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px;
+    }
+    .product {
+      width: 95% !important;
+      margin: 20px auto !important;
+      padding: 15px !important;
+    }
+    .product img {
+      width: 100px !important;
+    }
+    input[type="text"] {
+      width: 90% !important;
+      font-size: 16px;
+    }
+    .btn-stripe, .btn-paypal {
+      width: 90% !important;
+      font-size: 16px;
+    }
+    .banner img {
+      max-height: 180px !important;
+    }
+    .side-slideshow {
+      display: none !important;
+    }
+  }
+</style>
+
+
+<style>
+.main-slideshow {
+  max-width: 1000px;
+  margin: 30px auto;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.slide {
+  display: none;
+}
+.slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+@media (max-width: 768px) {
+  .main-slideshow {
+    width: 95%;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -221,10 +278,23 @@
   <img src="https://i.imgur.com/w1Hp5c2.png" alt="UC Offer">
 </div>
 
+
 <header>
-  <h1>🎮 TRUST UC</h1>
-  <p>Bli UC për PUBG Mobile me çmimet më të mira dhe shpejtësi maksimale!</p>
+  <img src="logo.png" alt="TRUST UC Logo" style="max-width:120px; margin-bottom:10px;">
+  <h1 style="background: linear-gradient(to right, #2e89ff, #00c9ff);
+             -webkit-background-clip: text; color: transparent; font-size: 2.6em; margin: 0;">
+    TRUST UC
+  </h1>
+  <p style="font-size:1.1em; margin-top: 10px;">Bli UC për PUBG Mobile me çmimet më të mira dhe dorëzim brenda 15 minutave</p>
 </header>
+
+<div class="main-slideshow">
+  <div class="slide fade"><img src="banner_1.png" alt="Oferta 1"></div>
+  <div class="slide fade"><img src="banner_2.png" alt="Oferta 2"></div>
+  <div class="slide fade"><img src="banner_3.png" alt="Oferta 3"></div>
+</div>
+
+
 
   <div class="banner"><img src="banner.png" alt="TRUST UC Banner"></div>
   <div class="logo"><img src="logo.png" alt="TRUST UC Logo"></div>
@@ -425,6 +495,22 @@ function showSideSlides() {
   if (sideIndex > slides.length) { sideIndex = 1 }
   slides[sideIndex - 1].style.display = "block";
   setTimeout(showSideSlides, 4000);
+}
+</script>
+
+
+<script>
+let currentIndex = 0;
+rotateSlides();
+function rotateSlides() {
+  let slides = document.getElementsByClassName("slide");
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  currentIndex++;
+  if (currentIndex > slides.length) { currentIndex = 1; }
+  slides[currentIndex - 1].style.display = "block";
+  setTimeout(rotateSlides, 4000);
 }
 </script>
 
