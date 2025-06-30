@@ -271,18 +271,6 @@
 }
 </style>
 
-
-@media (max-width: 768px) {
-  .main-slideshow {
-    width: 95%;
-    max-height: 180px;
-  }
-  .slide img {
-    max-height: 180px;
-    object-fit: cover;
-  }
-}
-
 </head>
 <body>
 
@@ -525,6 +513,42 @@ function rotateSlides() {
   setTimeout(rotateSlides, 4000);
 }
 </script>
+
+
+<section style="max-width: 600px; margin: 40px auto; background: #1c1c2e; padding: 25px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+  <h2 style="text-align:center; color:#2e89ff;">📥 Dërgo Porosi Manuale</h2>
+  <form action="https://script.google.com/macros/s/AKfycbyPk7Pk34YVNphtuMVbOj545iulKEqAVDuunvTAQ97YAobADXwRoBhHwFMrslPIA1xmOA/exec" method="POST" target="_blank">
+      <label for="pubg_id">PUBG ID:</label>
+      <input type="text" name="pubg_id" required placeholder="Shkruaj PUBG ID">
+
+      <label for="paketa">Zgjidh Paketën:</label>
+      <select name="paketa" required>
+        <option value="30 UC">30 UC</option>
+        <option value="60 UC">60 UC</option>
+        <option value="325 UC">325 UC</option>
+        <option value="660 UC">660 UC</option>
+        <option value="1800 UC">1800 UC</option>
+      </select>
+
+      <label for="shuma">Shuma (€):</label>
+      <select name="shuma" required>
+        <option value="0.55">0.55 €</option>
+        <option value="0.79">0.79 €</option>
+        <option value="4.20">4.20 €</option>
+        <option value="8.10">8.10 €</option>
+        <option value="21.00">21.00 €</option>
+      </select>
+
+      <label for="metoda">Metoda Pagesës:</label>
+      <select name="metoda" required>
+        <option value="PayPal">PayPal</option>
+        <option value="Stripe (Kartë)">Stripe (Kartë)</option>
+        <option value="Binance Pay">Binance Pay</option>
+      </select>
+
+      <button type="submit">Dërgo Porosinë</button>
+    </form>
+</section>
 
 </body>
 
