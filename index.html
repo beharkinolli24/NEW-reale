@@ -271,6 +271,18 @@
 }
 </style>
 
+
+@media (max-width: 768px) {
+  .main-slideshow {
+    width: 95%;
+    max-height: 180px;
+  }
+  .slide img {
+    max-height: 180px;
+    object-fit: cover;
+  }
+}
+
 </head>
 <body>
 
@@ -304,8 +316,16 @@
   <div class="product">
     <img src="uc30.png" alt="30 UC">
     <h2>30 UC - 0.55€</h2>
-    <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID"><br><br><p style="font-size: 0.9em; color: #ffc107; margin-top: 10px;">*Pagesa vetëm me kartë për këtë paketë</p>
-
+    <input type="text" id="pubg30" placeholder="Shkruaj PUBG ID"><br><br>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="item_name" value="30 UC">
+  <input type="hidden" name="amount" value="0.55">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="custom" value="" id="paypal-id-30">
+  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
+</form>
 <br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
   </div>
@@ -313,8 +333,16 @@
   <div class="product">
     <img src="uc60.png" alt="60 UC">
     <h2>60 UC - 0.79€</h2>
-    <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID"><br><br><p style="font-size: 0.9em; color: #ffc107; margin-top: 10px;">*Pagesa vetëm me kartë për këtë paketë</p>
-
+    <input type="text" id="pubg60" placeholder="Shkruaj PUBG ID"><br><br>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+  <input type="hidden" name="cmd" value="_xclick">
+  <input type="hidden" name="business" value="beharkinolli25@gmail.com">
+  <input type="hidden" name="item_name" value="60 UC">
+  <input type="hidden" name="amount" value="0.79">
+  <input type="hidden" name="currency_code" value="EUR">
+  <input type="hidden" name="custom" value="" id="paypal-id-60">
+  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
+</form>
 <br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
   </div>
