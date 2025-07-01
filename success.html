@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pagesa u Krye – TRUST UC</title>
+  <style>
+    body {
+      background: #0b0f1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h2 { color: #2e89ff; }
+  </style>
+</head>
+<body>
+  <h2>✅ Pagesa u krye me sukses!</h2>
+  <p>Dërgimi i UC po kryhet automatikisht...</p>
+  <div id="status" style="margin-top:20px;"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("product");
+    const playerId = params.get("player");
+    const serverId = params.get("server");
+
+    fetch("/.netlify/functions/send-uc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId, playerId, serverId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("status").innerHTML = `<p>✅ UC u dërgua me sukses!<br>Porosia: <strong>${data.orderSn || "E panjohur"}</strong></p>`;
+    })
+    .catch(err => {
+      document.getElementById("status").innerHTML = `<p>❌ Dërgimi dështoi. Ju lutem kontaktoni <a href="mailto:trustucshop@gmail.com">support</a>.</p>`;
+    });
+  </script>
+</body>
+</html>
