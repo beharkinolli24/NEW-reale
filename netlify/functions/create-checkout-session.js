@@ -1,6 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-
 const YOUR_DOMAIN = "https://trustucshop.com";
 
 exports.handler = async (event) => {
@@ -21,8 +20,13 @@ exports.handler = async (event) => {
       },
     ],
     mode: "payment",
-    success_url: `${YOUR_DOMAIN}/success.html?product=${ucProductId}&player=${playerId}&server=${serverId}`,
-    cancel_url:  `${YOUR_DOMAIN}/cancel.html`,
+    metadata: {
+      productId: ucProductId,
+      playerId,
+      serverId,
+    },
+    success_url: `${YOUR_DOMAIN}/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
   });
 
   return {
