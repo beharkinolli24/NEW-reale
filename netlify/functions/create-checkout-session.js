@@ -1,4 +1,5 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")("jMJieA1nIRMPXycSlbzQ3ModA5fohRnqa14NGLS0");
+;
 const YOUR_DOMAIN = "https://trustucshop.com";
 
 exports.handler = async (event) => {
