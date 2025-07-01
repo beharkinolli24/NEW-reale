@@ -1,5 +1,5 @@
-const stripe = require("stripe")("jMJieA1nIRMPXycSlbzQ3ModA5fohRnqa14NGLS0");
-;
+const stripe = require("stripe")("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");
+
 const YOUR_DOMAIN = "https://trustucshop.com";
 
 exports.handler = async (event) => {
