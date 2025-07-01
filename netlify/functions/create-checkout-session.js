@@ -1,4 +1,4 @@
-const stripe = require("stripe")("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");
+const stripe = require("stripe")("sk_live_process.env.STRIPE_SECRET_KEY.");
 
 const YOUR_DOMAIN = "https://trustucshop.com";
 
