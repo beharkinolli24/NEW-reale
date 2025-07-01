@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 
 const stripe = new Stripe('jMJieA1nIRMPXycSlbzQ3ModA5fohRnqa14NGLS0');
-const endpointSecret = 'whsec_C3DD4DI4IHKqOWfzN1qQx4Gb0PEPq7kh';
+const endpointSecret = 
 
 export async function handler(event) {
   const sig = event.headers['stripe-signature'];
