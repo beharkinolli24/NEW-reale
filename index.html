@@ -386,7 +386,13 @@
   </div>
 
   <script>
-    
+    const stripeLinks = {
+      "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
+      "60": "https://buy.stripe.com/bJe3cveOxaw2afAd4Ygw001",
+      "325": "https://buy.stripe.com/28E9ATeOx0Vs4Vg8OIgw002",
+      "660": "https://buy.stripe.com/6oU00jcGp33A5Zk9SMgw003",
+      "1800": "https://buy.stripe.com/6oUbJ121L7jQ4Vg0icgw004"
+    };
 
     function pay(amount) {
       const pubgId = document.getElementById("pubg" + amount).value.trim();
@@ -457,7 +463,7 @@
       serverId: form.serverId.value.trim()
     };
     document.getElementById("auto-confirm").innerText = "⏳ Duke krijuar pagesën...";
-    const res = await fetch("/.netlify/functions/create-checkout-session", {
+    const res = await fetch("/.netlify/functions/createCheckout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -473,57 +479,3 @@
 
 </body>
 </html>
-
-<!-- SYSTEM AUTOMATIK PAGESE -->
-<form id="uc-form">
-  <label for="ucProductId">Zgjidh paketën:</label>
-  <select id="ucProductId" required>
-    <option value="1938299181721538561">60 UC – €0.55</option>
-    <option value="1938300815303401474">325 UC – €4.20</option>
-    <option value="1931436511665717249">660 UC – €8.10</option>
-    <option value="1938550489652588546">1800 UC – €21.00</option>
-  </select><br><br>
-
-  <label for="playerId">Player ID:</label>
-  <input type="text" id="playerId" required /><br><br>
-
-  <label for="serverId">Server ID:</label>
-  <input type="text" id="serverId" required /><br><br>
-
-  <button type="submit">Paguaj me kartë (automatik)</button>
-</form>
-
-<br>
-<p>OSE</p>
-
-<a href="https://www.paypal.com/paypalme/trustucshop" target="_blank">
-  <button>Paguaj me PayPal</button>
-</a>
-
-<script>
-  document.getElementById("uc-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const ucProductId = document.getElementById("ucProductId").value;
-    const playerId = document.getElementById("playerId").value;
-    const serverId = document.getElementById("serverId").value;
-
-    fetch("/.netlify/functions/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ucProductId,
-        playerId,
-        serverId,
-      }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Something went wrong!");
-      }
-    });
-  });
-</script>
