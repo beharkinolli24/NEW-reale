@@ -23,11 +23,11 @@ exports.handler = async (event, context) => {
 
     // Call send-uc Netlify Function
     try {
-      const response = await fetch(`${process.env.URL}/.netlify/functions/send-uc`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, playerId, serverId }),
-      });
+      const response = await fetch('https://trustucshop.com/.netlify/functions/send-uc', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ productId, playerId, serverId })
+});
 
       const data = await response.json();
       console.log('✅ UC sent:', data);
