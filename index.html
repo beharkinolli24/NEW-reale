@@ -386,13 +386,7 @@
   </div>
 
   <script>
-    const stripeLinks = {
-      "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
-      "60": "https://buy.stripe.com/bJe3cveOxaw2afAd4Ygw001",
-      "325": "https://buy.stripe.com/28E9ATeOx0Vs4Vg8OIgw002",
-      "660": "https://buy.stripe.com/6oU00jcGp33A5Zk9SMgw003",
-      "1800": "https://buy.stripe.com/6oUbJ121L7jQ4Vg0icgw004"
-    };
+    
 
     function pay(amount) {
       const pubgId = document.getElementById("pubg" + amount).value.trim();
@@ -439,7 +433,48 @@
 
 <section class="product" style="margin-top: 60px;">
   <h2 style="color:#2e89ff;">Bli Automatikisht UC (Stripe + U7BUY)</h2>
-  
+  <form id="uc-form">
+    <select name="ucProductId" required style="padding:10px; border-radius:6px; font-size:16px;">
+      <option value="1938299181721538561">60 UC – €0.55</option>
+      <option value="1938300815303401474">325 UC – €4.20</option>
+      <option value="1931436511665717249">660 UC – €8.10</option>
+      <option value="1938550489652588546">1800 UC – €21.00</option>
+    </select><br><br>
+    <input type="text" name="playerId" placeholder="Player ID" required /><br><br>
+    <input type="text" name="serverId" placeholder="Server ID" required /><br><br>
+    <button type="submit" class="btn-stripe">Paguaj me kartë (automatik) 💳</button>
+  </form>
+  <div id="auto-confirm" style="margin-top:15px; color: #0f0;"></div>
+</section>
+
+<script>
+  document.getElementById("uc-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      ucProductId: form.ucProductId.value,
+      playerId: form.playerId.value.trim(),
+      serverId: form.serverId.value.trim()
+    };
+    document.getElementById("auto-confirm").innerText = "⏳ Duke krijuar pagesën...";
+    const res = await fetch("/.netlify/functions/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      document.getElementById("auto-confirm").innerText = "❌ Dështoi krijimi i pagesës.";
+    }
+  });
+</script>
+
+</body>
+</html>
+
+<!-- SYSTEM AUTOMATIK PAGESE -->
 <form id="uc-form">
   <label for="ucProductId">Zgjidh paketën:</label>
   <select id="ucProductId" required>
@@ -492,7 +527,3 @@
     });
   });
 </script>
-
-
-</body>
-</html>
