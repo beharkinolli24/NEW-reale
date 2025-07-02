@@ -1,2 +1,8 @@
-[functions]
-  directory = "netlify/functions"
+
+[build]
+  functions = "netlify/functions"
+
+[[headers]]
+  for = "/.netlify/functions/stripeWebhook"
+  [headers.values]
+  Content-Type = "application/json"
