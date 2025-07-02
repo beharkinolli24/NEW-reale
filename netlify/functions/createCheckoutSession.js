@@ -1,47 +1,36 @@
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')('sk_live_jMJieA1nIRMPXycSlbzQ3ModA5fohRnqa14NGLS0');
 
 exports.handler = async (event) => {
-  try {
-    const { playerId, serverId, productId, amount, ucAmount } = JSON.parse(event.body);
+  const data = JSON.parse(event.body);
+  const { productId, playerId, serverId, amount, ucAmount } = data;
 
-    if (!playerId || !serverId || !productId || !amount || !ucAmount) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Të dhëna të paplota" }),
-      };
-    }
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [{
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: `${ucAmount} UC`,
-          },
-          unit_amount: Math.round(amount * 100),
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'payment',
+    line_items: [{
+      price_data: {
+        currency: 'eur',
+        unit_amount: Math.round(amount * 100),
+        product_data: {
+          name: `${ucAmount} UC – PUBG`,
+          description: `Player ID: ${playerId} | Server ID: ${serverId}`,
         },
-        quantity: 1,
-      }],
-      metadata: {
-        playerId,
-        serverId,
-        productId
       },
-      success_url: 'https://trustucshop.com/success',
-      cancel_url: 'https://trustucshop.com/cancel'
-    });
+      quantity: 1,
+    }],
+    success_url: 'https://trustucshop.com/success',
+    cancel_url: 'https://trustucshop.com/cancel',
+    metadata: {
+      productId,
+      playerId,
+      serverId,
+      ucAmount
+    }
+  });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ url: session.url }),
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
-    };
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ url: session.url })
+  };
 };
