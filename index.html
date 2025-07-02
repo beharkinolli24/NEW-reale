@@ -435,15 +435,20 @@
   <h2 style="color:#2e89ff;">Bli Automatikisht UC (Stripe + U7BUY)</h2>
   <form id="uc-form">
     <select name="ucProductId" required style="padding:10px; border-radius:6px; font-size:16px;">
-      <option value="1938299181721538561" data-amount="0.55" data-uc="60">60 UC – €0.55</option>
-      <option value="1938300815303401474" data-amount="4.20" data-uc="325">325 UC – €4.20</option>
-      <option value="1931436511665717249" data-amount="8.10" data-uc="660">660 UC – €8.10</option>
-      <option value="1938550489652588546" data-amount="21.00" data-uc="1800">1800 UC – €21.00</option>
+      <option value="1938299181721538561">60 UC – €0.55</option>
+      <option value="1938300815303401474">325 UC – €4.20</option>
+      <option value="1931436511665717249">660 UC – €8.10</option>
+      <option value="1938550489652588546">1800 UC – €21.00</option>
     </select><br><br>
     <input type="text" name="playerId" placeholder="Player ID" required /><br><br>
     <input type="text" name="serverId" placeholder="Server ID" required /><br><br>
     <button type="submit" class="btn-stripe">Paguaj me kartë (automatik) 💳</button>
-  </form>
+  
+    <div class="text-center">
+      <button id="payWithStripe" type="submit" class="btn btn-success btn-lg mt-3">💳 Paguaj me kartë (automatik)</button>
+    </div>
+    </form>
+    
   <div id="auto-confirm" style="margin-top:15px; color: #0f0;"></div>
 </section>
 
@@ -495,6 +500,57 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("auto-confirm").innerText = "❌ Dështoi krijimi i pagesës.";
       }
     } catch (err) {
+      document.getElementById("auto-confirm").innerText = "❌ Gabim gjatë krijimit të pagesës.";
+    }
+  });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("uc-form");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const select = document.getElementById("ucProductId");
+    const selectedOption = select.options[select.selectedIndex];
+    const productId = select.value;
+    const amount = parseFloat(selectedOption.getAttribute("data-amount"));
+    const ucAmount = parseInt(selectedOption.getAttribute("data-uc"));
+
+    const playerId = document.querySelector("input[name='playerId']").value.trim();
+    const serverId = document.querySelector("input[name='serverId']").value.trim();
+
+    if (!playerId || !serverId || !productId || !amount || !ucAmount) {
+      alert("Ju lutem plotësoni të gjitha fushat.");
+      return;
+    }
+
+    document.getElementById("auto-confirm").innerText = "⏳ Duke krijuar pagesën...";
+    try {
+      const res = await fetch("/.netlify/functions/createCheckoutSession", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          playerId,
+          serverId,
+          amount,
+          ucAmount
+        })
+      });
+
+      const result = await res.json();
+      if (result.url) {
+        location.replace(result.url);
+      } else {
+        console.error("Gabim:", result);
+        document.getElementById("auto-confirm").innerText = "❌ Dështoi krijimi i pagesës.";
+      }
+    } catch (err) {
+      console.error("Gabim:", err);
       document.getElementById("auto-confirm").innerText = "❌ Gabim gjatë krijimit të pagesës.";
     }
   });
