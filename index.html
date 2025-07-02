@@ -455,6 +455,62 @@
 
 
 
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("uc-form");
+    if (!form) {
+      console.error("❌ Form uc-form nuk u gjet!");
+      return;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const select = document.getElementById("ucProductId");
+      const selectedOption = select.options[select.selectedIndex];
+      const productId = select.value;
+      const amount = parseFloat(selectedOption.getAttribute("data-amount"));
+      const ucAmount = parseInt(selectedOption.getAttribute("data-uc"));
+
+      const playerId = document.getElementById("playerId").value.trim();
+      const serverId = document.getElementById("serverId").value.trim();
+
+      if (!playerId || !serverId || !productId) {
+        alert("Ju lutem plotësoni të gjitha fushat.");
+        return;
+      }
+
+      document.getElementById("auto-confirm").innerText = "⏳ Duke krijuar pagesën...";
+      try {
+        const res = await fetch("/.netlify/functions/createCheckoutSession", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId,
+            playerId,
+            serverId,
+            amount,
+            ucAmount
+          })
+        });
+
+        const result = await res.json();
+        console.log("🎯 Përgjigje nga backend:", result);
+
+        if (result.url) {
+          window.location.href = result.url;
+        } else {
+          document.getElementById("auto-confirm").innerText = "❌ Dështoi krijimi i pagesës.";
+        }
+      } catch (err) {
+        document.getElementById("auto-confirm").innerText = "❌ Gabim gjatë kërkesës.";
+        console.error(err);
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
 
