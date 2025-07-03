@@ -1,1 +1,8 @@
-
+{
+  "name": "trustucshop",
+  "version": "1.0.0",
+  "dependencies": {
+    "google-spreadsheet": "^3.3.0",
+    "stripe": "^12.0.0"
+  }
+}
