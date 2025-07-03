@@ -1,54 +1,37 @@
-/* eslint-disable */
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-/**
- *  POST body expected:
- *  { productId, ucAmount, amount, playerId, serverId, email }
- */
-exports.handler = async (event) => {
+export default async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).end('Only POST');
+
   try {
-    const data = JSON.parse(event.body || '{}');
-
-    // ✅ 1. Validim minimal
-    const required = ['productId', 'ucAmount', 'amount', 'playerId', 'serverId', 'email'];
-    for (const key of required) {
-      if (!data[key]) {
-        console.log('❌  Missing field:', key);
-        return { statusCode: 400, body: `Missing ${key}` };
-      }
+    const { productId, ucAmount, amount, playerId, serverId, email } = req.body;
+    if (![productId, ucAmount, amount, playerId, serverId, email].every(Boolean)) {
+      return res.status(400).json({ error: 'Missing field(s).' });
     }
 
-    // ✅ 2. Krijo sesionin
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [{
+      mode       : 'payment',
+      line_items : [{
         price_data: {
           currency: 'eur',
-          unit_amount: Math.round(Number(data.amount) * 100),
+          unit_amount: Math.round(amount * 100),
           product_data: {
-            name: `${data.ucAmount} UC – PUBG`,
-            description: `Player ID: ${data.playerId} | Server ID: ${data.serverId}`
+            name: `${ucAmount} UC – PUBG`,
+            description: `Player ${playerId} / Server ${serverId}`
           }
         },
         quantity: 1
       }],
-      success_url: `${process.env.SUCCESS_URL || 'https://your-site.com/success'}?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${process.env.CANCEL_URL  || 'https://your-site.com/cancel'}`,
-      metadata: {
-        productId : data.productId,
-        playerId  : data.playerId,
-        serverId  : data.serverId,
-        ucAmount  : data.ucAmount,
-        email     : data.email
-      }
+      success_url: `${process.env.PUBLIC_URL}/success.html`,
+      cancel_url : `${process.env.PUBLIC_URL}/cancel.html`,
+      metadata   : { productId, playerId, serverId, ucAmount, email }
     });
 
-    console.log('✅ Session created:', session.id);
-    return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
-
+    res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('🔥 Stripe error:', err);
-    return { statusCode: 500, body: 'Stripe error' };
+    console.error('Stripe error:', err);
+    res.status(500).json({ error: 'Stripe error' });
   }
 };
