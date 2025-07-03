@@ -537,6 +537,33 @@ async function sendUC(pubgId, ucAmount) {
 }
 </script>
 
+
+<script>
+  async function pay(productId, ucAmount, amount) {
+    const playerId = document.querySelector('#playerId')?.value;
+    const serverId = document.querySelector('#serverId')?.value;
+    const email = document.querySelector('#email')?.value;
+
+    if (!playerId || !serverId || !email) {
+      alert('Ju lutemi plotësoni të gjitha fushat!');
+      return;
+    }
+
+    const response = await fetch('/.netlify/functions/createCheckoutSession', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId, playerId, serverId, email, amount, ucAmount })
+    });
+
+    const data = await response.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('Dështoi krijimi i sesionit të pagesës!');
+    }
+  }
+</script>
+
 </body>
 
 </html>
