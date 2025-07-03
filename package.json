@@ -1,8 +1,0 @@
-{
-  "name": "trust-uc-vercel",
-  "type": "module",
-  "dependencies": {
-    "stripe": "^12.0.0",
-    "node-fetch": "^3.3.2"
-  }
-}
