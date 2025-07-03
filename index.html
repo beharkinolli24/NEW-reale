@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Stripe Checkout</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial; padding: 30px; background: #111; color: white; text-align: center }
+    input, select, button { padding: 10px; margin: 10px; font-size: 16px; border-radius: 5px; border: none }
+    .btn { background-color: #28a745; color: white; cursor: pointer }
+  </style>
+</head>
+<body>
+  <h1>Testo Pagesën me Stripe Checkout</h1>
+  <input id="playerId" placeholder="Player ID" required>
+  <input id="serverId" placeholder="Server ID" required>
+  <input id="email" placeholder="Email" required><br>
+  <select id="package">
+    <option value="">Zgjidh pakon</option>
+    <option value="1938299181721538561|325|4.10">325 UC – €4.10</option>
+    <option value="1938300815303401474|660|8.10">660 UC – €8.10</option>
+    <option value="1931436511665717249|1800|20.50">1800 UC – €20.50</option>
+    <option value="1898646498683515844|3850|41.50">3850 UC – €41.50</option>
+    <option value="1909194994574553089|8100|80.00">8100 UC – €80.00</option>
+  </select><br>
+  <button class="btn" onclick="pay()">Paguaj me kartë</button>
+
+<script>
+async function pay() {
+  const [productId, ucAmount, amount] = document.getElementById('package').value.split('|');
+  const playerId = document.getElementById('playerId').value.trim();
+  const serverId = document.getElementById('serverId').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  if (!productId || !playerId || !serverId || !email) {
+    alert('Ju lutem plotësoni të gjitha fushat!');
+    return;
+  }
+
+  const res = await fetch("/.netlify/functions/createCheckoutSession", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId, ucAmount, amount, playerId, serverId, email })
+  });
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url;
+  } else {
+    alert("Gabim: " + (data.error || "Nuk u krijua sesioni"));
+  }
+}
+</script>
+</body>
+</html>
