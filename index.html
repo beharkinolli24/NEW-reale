@@ -4,8 +4,6 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="description" content="TRUST UC - Bli UC për PUBG me çmimet më të mira në Shqipëri. Pagesë e sigurt me PayPal ose kartë. Dorëzim brenda 15 minutave.">
-<meta name="keywords" content="PUBG UC Shqipëri, UC me PayPal, Trust UC, Bli UC me kartë, UC për PUBG Mobile, UC ofertë 2025">
 <meta name="author" content="TRUST UC">
 
   <meta charset="UTF-8">
@@ -78,7 +76,6 @@
     text-align: center;
   }
 
-  .btn-stripe, .btn-paypal {
     padding: 12px 24px;
     border: none;
     border-radius: 10px;
@@ -93,7 +90,6 @@
     color: white;
   }
 
-  .btn-paypal {
     background-color: #ffc439;
     color: black;
   }
@@ -173,7 +169,6 @@
 
 
 <style>
-  .btn-paypal {
     background-color: #ffc439;
     color: #111;
     padding: 10px 24px;
@@ -185,7 +180,6 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .btn-paypal:hover {
     background-color: #ffb347;
   }
 </style>
@@ -233,7 +227,6 @@
       width: 90% !important;
       font-size: 16px;
     }
-    .btn-stripe, .btn-paypal {
       width: 90% !important;
       font-size: 16px;
     }
@@ -311,8 +304,6 @@
   <input type="hidden" name="item_name" value="30 UC">
   <input type="hidden" name="amount" value="0.55">
   <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="custom" value="" id="paypal-id-30">
-  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
 </form>
 <br>
     <button class="btn-stripe" onclick="pay('30')">Paguaj me kartë 💳</button>
@@ -328,8 +319,6 @@
   <input type="hidden" name="item_name" value="60 UC">
   <input type="hidden" name="amount" value="0.79">
   <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="custom" value="" id="paypal-id-60">
-  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
 </form>
 <br>
     <button class="btn-stripe" onclick="pay('60')">Paguaj me kartë 💳</button>
@@ -345,8 +334,6 @@
   <input type="hidden" name="item_name" value="325 UC">
   <input type="hidden" name="amount" value="4.20">
   <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="custom" value="" id="paypal-id-325">
-  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
 </form>
 <br>
     <button class="btn-stripe" onclick="pay('325')">Paguaj me kartë 💳</button>
@@ -362,8 +349,6 @@
   <input type="hidden" name="item_name" value="660 UC">
   <input type="hidden" name="amount" value="8.10">
   <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="custom" value="" id="paypal-id-660">
-  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
 </form>
 <br>
     <button class="btn-stripe" onclick="pay('660')">Paguaj me kartë 💳</button>
@@ -379,49 +364,12 @@
   <input type="hidden" name="item_name" value="1800 UC">
   <input type="hidden" name="amount" value="21.00">
   <input type="hidden" name="currency_code" value="EUR">
-  <input type="hidden" name="custom" value="" id="paypal-id-1800">
-  <input type="submit" value="Paguaj me PayPal 🟡" class="btn-paypal">
 </form>
 <br>
     <button class="btn-stripe" onclick="pay('1800')">Paguaj me kartë 💳</button>
   </div>
 
-  <script>
-    const stripeLinks = {
-      "30": "https://buy.stripe.com/4gM8wP6i18nUcnI8OIgw000",
-      "60": "https://buy.stripe.com/bJe3cveOxaw2afAd4Ygw001",
-      "325": "https://buy.stripe.com/28E9ATeOx0Vs4Vg8OIgw002",
-      "660": "https://buy.stripe.com/6oU00jcGp33A5Zk9SMgw003",
-      "1800": "https://buy.stripe.com/6oUbJ121L7jQ4Vg0icgw004"
-    };
-
-    function pay(amount) {
-      const pubgId = document.getElementById("pubg" + amount).value.trim();
-      if (!pubgId) {
-        alert("Ju lutem shkruani PUBG ID tuaj.");
-        return;
-      }
-
-      const data = {
-        pubg_id: pubgId,
-        paketa: "Top-Up " + amount + " UC"
-      };
-
-      fetch("https://trustuc-proxy.onrender.com/submit", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      }).then(() => {
-        document.getElementById("confirm").innerText = "✅ U ruajt me sukses. Po kaloni në pagesë...";
-        setTimeout(() => {
-          await sendUC(pubgId, amount);
-  window.location.href = stripeLinks[amount];
-        }, 1500);
-      }).catch((err) => {
-        alert("❌ Dështoi ruajtja: " + err);
-      });
-    }
-  </script>
+  
 
 <footer>
   <p>© 2025 TRUST UC | Të gjitha të drejtat e rezervuara</p>
@@ -441,7 +389,6 @@
     <p>“UC për 5 minuta, super shërbim!”</p>
   </div>
   <div class="testimonial-box">
-    <p>“Paguajta me PayPal, çdo gjë perfekte 👌”</p>
   </div>
   <div class="testimonial-box">
     <p>“100% e sigurt, do blej përsëri!”</p>
@@ -460,7 +407,6 @@
     <p><strong>Sa kohë zgjat dergimi i UC?</strong><br>UC zakonisht dërgohet brenda 15 deri në 30 minuta pas pagesës.</p>
   </div>
   <div class="testimonial-box">
-    <p><strong>A është e sigurt të paguaj me kartë ose PayPal?</strong><br>Po! TRUST UC përdor Stripe dhe PayPal – platformat më të sigurta të pagesës online.</p>
   </div>
   <div class="testimonial-box">
     <p><strong>Si mund të kontaktoj nëse kam pyetje?</strong><br>Na shkruani në Instagram: <a href="https://instagram.com/trustuc" target="_blank">@trustuc</a></p>
@@ -542,7 +488,6 @@ function rotateSlides() {
 
       <label for="metoda">Metoda Pagesës:</label>
       <select name="metoda" required>
-        <option value="PayPal">PayPal</option>
         <option value="Stripe (Kartë)">Stripe (Kartë)</option>
         <option value="Binance Pay">Binance Pay</option>
       </select>
