@@ -35,16 +35,8 @@
       const productId = select.value;
       const amount = parseFloat(selectedOption.getAttribute("data-amount"));
       const ucAmount = parseInt(selectedOption.getAttribute("data-uc"));
-
       const playerId = document.getElementById("playerId").value.trim();
       const serverId = document.getElementById("serverId").value.trim();
-
-      if (!playerId || !serverId) {
-        alert("Ju lutem shkruani Player ID dhe Server ID.");
-        return;
-      }
-
-      document.getElementById("auto-confirm").innerText = "⏳ Duke krijuar pagesën...";
 
       const res = await fetch("/.netlify/functions/createCheckoutSession", {
         method: "POST",
@@ -62,7 +54,7 @@
       if (result.url) {
         window.location.href = result.url;
       } else {
-        document.getElementById("auto-confirm").innerText = "❌ Dështoi krijimi i pagesës.";
+        alert("❌ Dështoi krijimi i pagesës.");
       }
     });
   </script>
