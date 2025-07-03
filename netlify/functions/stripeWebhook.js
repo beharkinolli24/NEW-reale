@@ -1,34 +1,36 @@
-
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const axios = require('axios');
+const creds = require('./credentials.json');
 
 exports.handler = async (event) => {
   const sig = event.headers['stripe-signature'];
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  let eventData;
 
   try {
-    const stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
-
-    if (stripeEvent.type === 'checkout.session.completed') {
-      const session = stripeEvent.data.object;
-      const metadata = session.metadata;
-
-      await axios.post('https://api.u7buy.com/order/start_delivery', {
-        productId: metadata.productId,
-        playerId: metadata.playerId,
-        serverId: metadata.serverId,
-        quantity: 1
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'apiKey': process.env.U7BUY_API_KEY
-        }
-      });
-    }
-
-    return { statusCode: 200, body: JSON.stringify({ received: true }) };
+    eventData = stripe.webhooks.constructEvent(event.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook error:", err.message);
     return { statusCode: 400, body: `Webhook error: ${err.message}` };
   }
+
+  if (eventData.type === 'checkout.session.completed') {
+    const session = eventData.data.object;
+    const { productId, playerId, serverId, ucAmount, email } = session.metadata;
+
+    const doc = new GoogleSpreadsheet('1-6lmqLmaVZvqt23dXJ2QXdPbu4nBjFF61uhUybLv_y0');
+    await doc.useServiceAccountAuth(creds);
+    await doc.loadInfo();
+
+    const sheet = doc.sheetsByIndex[0];
+    await sheet.addRow({
+      'Data & Ora': new Date().toLocaleString(),
+      'Player ID': playerId,
+      'Server ID': serverId,
+      'Email': email,
+      'Paketa UC': ucAmount,
+      'Çmimi (€)': session.amount_total / 100,
+      'Status': 'Sukses',
+    });
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ received: true }) };
 };
