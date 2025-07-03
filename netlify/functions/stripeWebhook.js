@@ -1,36 +1,27 @@
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const creds = require('./credentials.json');
+/* eslint-disable */
+const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const crypto  = require('crypto');
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 exports.handler = async (event) => {
   const sig = event.headers['stripe-signature'];
-  let eventData;
+  let stripeEvent;
 
   try {
-    eventData = stripe.webhooks.constructEvent(event.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
   } catch (err) {
-    return { statusCode: 400, body: `Webhook error: ${err.message}` };
+    console.error('🚫  Webhook signature failed:', err.message);
+    return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
 
-  if (eventData.type === 'checkout.session.completed') {
-    const session = eventData.data.object;
-    const { productId, playerId, serverId, ucAmount, email } = session.metadata;
+  // ✅ Vetëm kur pagesa përfundon
+  if (stripeEvent.type === 'checkout.session.completed') {
+    const session = stripeEvent.data.object;
+    console.log('✅ Payment succeeded for session', session.id);
 
-    const doc = new GoogleSpreadsheet('1-6lmqLmaVZvqt23dXJ2QXdPbu4nBjFF61uhUybLv_y0');
-    await doc.useServiceAccountAuth(creds);
-    await doc.loadInfo();
+    // 👉  Këtu mund të dërgosh UC ose të ruash porosinë
+    // p.sh. call finalizeOrder(session);
 
-    const sheet = doc.sheetsByIndex[0];
-    await sheet.addRow({
-      'Data & Ora': new Date().toLocaleString(),
-      'Player ID': playerId,
-      'Server ID': serverId,
-      'Email': email,
-      'Paketa UC': ucAmount,
-      'Çmimi (€)': session.amount_total / 100,
-      'Status': 'Sukses',
-    });
   }
-
-  return { statusCode: 200, body: JSON.stringify({ received: true }) };
+  return { statusCode: 200, body: 'ok' };
 };
