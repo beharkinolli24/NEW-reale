@@ -1,15 +1,13 @@
 
-const stripe = require('stripe')('sk_live_jMJieA1nIRMPXycSlbzQ3ModA5fohRnqa14NGLS0');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const axios = require('axios');
 
 exports.handler = async (event) => {
   const sig = event.headers['stripe-signature'];
-  const endpointSecret = 'whsec_C3DD4DI4IHKqOWfzN1qQx4Gb0PEPq7kh';
-
-  let stripeEvent;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   try {
-    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
+    const stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
 
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
@@ -23,13 +21,12 @@ exports.handler = async (event) => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'apiKey': 'ivGuB4iP0FKkl6U3lbZYLFxRYJiGd0mnaXI7rgLi'
+          'apiKey': process.env.U7BUY_API_KEY
         }
       });
     }
 
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
-
   } catch (err) {
     console.error("Webhook error:", err.message);
     return { statusCode: 400, body: `Webhook error: ${err.message}` };
