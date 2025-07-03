@@ -1,57 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Faleminderit për pagesën</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: white;
-      text-align: center;
-      padding-top: 60px;
-    }
-    .success-box {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Faleminderit për blerjen</title>
 </head>
 <body>
-  <div class="success-box">
-    <h2>✅ Pagesa u krye me sukses!</h2>
-    <p>Jemi duke dërguar UC-në tuaj automatikisht...</p>
-    <p id="delivery-status">⏳</p>
-  </div>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
-
-    if (sessionId) {
-      fetch("/.netlify/functions/finalizeOrder", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          document.getElementById("delivery-status").innerText = "🎁 UC u dërgua me sukses!";
-        } else {
-          document.getElementById("delivery-status").innerText = "❌ Dështoi dërgimi i UC.";
-        }
-      })
-      .catch(err => {
-        document.getElementById("delivery-status").innerText = "❌ Gabim teknik gjatë dërgimit.";
-      });
-    } else {
-      document.getElementById("delivery-status").innerText = "❌ Session ID mungon.";
-    }
-  </script>
+  <h2>Faleminderit për blerjen tuaj!</h2>
+  <p>UC do të dërgohet brenda 1–5 minutave pas përfundimit të pagesës.</p>
 </body>
 </html>
