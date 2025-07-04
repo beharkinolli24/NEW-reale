@@ -40,7 +40,7 @@
 const products = {
   "30":  { uc:30,   price:0.55,  productId:"ID_30_UC"                 },
   "60":  { uc:60,   price:0.79,  productId:"1938299181721538561"      },
-  "325": { uc:325,  price:4.10,  productId:"1938299181721538561"      },
+  "325": { uc:325,  price:4.20,  productId:"1938299181721538561"      },
   "660": { uc:660,  price:8.10,  productId:"1938300815303401474"      },
   "1800":{ uc:1800, price:20.50, productId:"1931436511665717249"      },
   "3850":{ uc:3850, price:41.50, productId:"1898646498683515844"      },
@@ -69,46 +69,44 @@ function pay(key){
   }
 
   const item = products[key];
+  const fixedAmount = parseFloat(item.price.toString().replace(",", "."));
 
-  /* a) Ruaj porosinë (shembull) */
   fetch("https://trustuc-proxy.onrender.com/submit",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
       pubg_id :pubgId,
       paketa  :`${item.uc} UC`,
-      shuma   :item.price
+      shuma   :fixedAmount
     })
   })
   .then(()=>{
     document.getElementById("confirm").innerText =
       "✅ U ruajt me sukses. Po kaloni në pagesë…";
 
-    /* b) Krijo Stripe Checkout Session */
     return fetch("/.netlify/functions/create-checkout-session",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({
         productId : item.productId,
         ucAmount  : item.uc,
-        amount    : item.price,
+        amount    : fixedAmount,
         playerId  : pubgId,
         email     : ""
       })
     });
   })
-  .then(r=>r.json())
-  .then(data=>{
-    if(data.url){
-      window.location.href = data.url;
-    }else{
-      alert("Gabim: nuk u krijua sesioni Stripe.");
+  .then(r => r.json().then(data => ({ status: r.status, data })))
+  .then(({ status, data }) => {
+    if (status !== 200 || !data.url) {
+      alert("❌ Gabim i plotë: " + (data.error || "Nuk u krijua sesioni."));
+      return;
     }
+    window.location.href = data.url;
   })
   .catch(err => {
-  console.log("Gabim nga fetch:", err);
-  alert("❌ Gabim i plotë: " + err.message);
-});
+    alert("❌ Gabim i plotë: " + err.message);
+  });
 }
 </script>
 
