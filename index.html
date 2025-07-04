@@ -105,9 +105,10 @@ function pay(key){
       alert("Gabim: nuk u krijua sesioni Stripe.");
     }
   })
-  .catch(err=>{
-    alert("❌ Dështoi procesi: "+err);
-  });
+  .catch(err => {
+  console.log("Gabim nga fetch:", err);
+  alert("❌ Gabim i plotë: " + err.message);
+});
 }
 </script>
 
