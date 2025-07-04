@@ -1,54 +1,116 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Test Stripe Checkout</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRUST UC – UC PUBG</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Arial; padding: 30px; background: #111; color: white; text-align: center }
-    input, select, button { padding: 10px; margin: 10px; font-size: 16px; border-radius: 5px; border: none }
-    .btn { background-color: #28a745; color: white; cursor: pointer }
+    :root { --blue:#2e89ff; --dark:#1a1a1a; --bg:#0b0f1a }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#fff}
+    body   {background:var(--bg)}
+    header {background:linear-gradient(135deg,var(--blue),#174ea6);text-align:center;padding:40px 20px}
+    header h1{font-size:2.6em;background:linear-gradient(to right,var(--blue),#00c9ff);-webkit-background-clip:text;color:transparent}
+    .product{background:var(--dark);padding:20px;margin:30px auto;border-radius:12px;text-align:center;width:80%}
+    .product img{width:140px}
+    input{padding:8px;border-radius:6px;border:none;width:70%;max-width:260px;margin-top:10px;color:#000}
+    .btn-stripe{background:var(--blue);padding:12px 24px;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:14px}
+    .btn-stripe:hover{background:#1c6dd0}
+    #confirm{margin-top:20px;color:#0f0;text-align:center}
+    footer{background:var(--blue);text-align:center;padding:20px;margin-top:60px}
   </style>
 </head>
 <body>
-  <h1>Testo Pagesën me Stripe Checkout</h1>
-  <input id="playerId" placeholder="Player ID" required>
-  <input id="serverId" placeholder="Server ID" required>
-  <input id="email" placeholder="Email" required><br>
-  <select id="package">
-    <option value="">Zgjidh pakon</option>
-    <option value="1938299181721538561|325|4.10">325 UC – €4.10</option>
-    <option value="1938300815303401474|660|8.10">660 UC – €8.10</option>
-    <option value="1931436511665717249|1800|20.50">1800 UC – €20.50</option>
-    <option value="1898646498683515844|3850|41.50">3850 UC – €41.50</option>
-    <option value="1909194994574553089|8100|80.00">8100 UC – €80.00</option>
-  </select><br>
-  <button class="btn" onclick="pay()">Paguaj me kartë</button>
+<header>
+  <img src="logo.png" alt="TRUST UC Logo" style="max-width:120px;margin-bottom:10px">
+  <h1>TRUST UC</h1>
+  <p>Bli UC për PUBG Mobile me çmimet më të mira dhe dorëzim brenda 15 minutave</p>
+</header>
 
+<h2 style="text-align:center;margin-top:30px">Zgjidh Paketën</h2>
+<div id="confirm"></div>
+
+<!-- ===== PRODUKTET =================================================== -->
+<div id="products"></div>
+
+<!-- ===== SCRIPT ====================================================== -->
 <script>
-async function pay() {
-  const [productId, ucAmount, amount] = document.getElementById('package').value.split('|');
-  const playerId = document.getElementById('playerId').value.trim();
-  const serverId = document.getElementById('serverId').value.trim();
-  const email    = document.getElementById('email').value.trim();
-  if (!productId || !playerId || !serverId || !email) {
-    alert('Ju lutem plotësoni të gjitha fushat!');
+/* 1. Të dhënat e paketave */
+const products = {
+  "30":  { uc:30,   price:0.55,  productId:"ID_30_UC"                 },
+  "60":  { uc:60,   price:0.79,  productId:"1938299181721538561"      },
+  "325": { uc:325,  price:4.10,  productId:"1938299181721538561"      },
+  "660": { uc:660,  price:8.10,  productId:"1938300815303401474"      },
+  "1800":{ uc:1800, price:20.50, productId:"1931436511665717249"      },
+  "3850":{ uc:3850, price:41.50, productId:"1898646498683515844"      },
+  "8100":{ uc:8100, price:80.00, productId:"1909194994574553089"      }
+};
+
+/* 2. Krijo kartat në DOM */
+const container = document.getElementById("products");
+for (const key in products) {
+  const p = products[key];
+  container.innerHTML += `
+    <div class="product">
+      <img src="uc${p.uc}.png" alt="${p.uc} UC">
+      <h2>${p.uc} UC – €${p.price.toFixed(2)}</h2>
+      <input type="text" id="pubg${key}" placeholder="Shkruaj PUBG ID">
+      <button class="btn-stripe" onclick="pay('${key}')">Paguaj me kartë 💳</button>
+    </div>`;
+}
+
+/* 3. Funksioni pay() */
+function pay(key){
+  const pubgId = document.getElementById("pubg"+key).value.trim();
+  if(!pubgId){
+    alert("Plotëso PUBG ID.");
     return;
   }
 
-  const res = await fetch("/.netlify/functions/createCheckoutSession", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId, ucAmount, amount, playerId, serverId, email })
+  const item = products[key];
+
+  /* a) Ruaj porosinë (shembull) */
+  fetch("https://trustuc-proxy.onrender.com/submit",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      pubg_id :pubgId,
+      paketa  :`${item.uc} UC`,
+      shuma   :item.price
+    })
+  })
+  .then(()=>{
+    document.getElementById("confirm").innerText =
+      "✅ U ruajt me sukses. Po kaloni në pagesë…";
+
+    /* b) Krijo Stripe Checkout Session */
+    return fetch("/.netlify/functions/create-checkout-session",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        productId : item.productId,
+        ucAmount  : item.uc,
+        amount    : item.price,
+        playerId  : pubgId,
+        email     : ""
+      })
+    });
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.url){
+      window.location.href = data.url;
+    }else{
+      alert("Gabim: nuk u krijua sesioni Stripe.");
+    }
+  })
+  .catch(err=>{
+    alert("❌ Dështoi procesi: "+err);
   });
-  const data = await res.json();
-  if (data.url) {
-    window.location.href = data.url;
-  } else {
-    alert("Gabim: " + (data.error || "Nuk u krijua sesioni"));
-  }
 }
 </script>
+
+<footer>© 2025 TRUST UC | Të gjitha të drejtat e rezervuara</footer>
 </body>
 </html>
