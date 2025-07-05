@@ -17,6 +17,7 @@
     input{padding:8px;border-radius:6px;border:none;width:70%;max-width:260px;margin-top:10px;color:#000}
     .btn-stripe{background:var(--blue);padding:12px 24px;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:14px}
     .btn-stripe:hover{background:#1c6dd0}
+    .fee-note{font-size:.9em;color:#ccc;margin-top:6px;}
     #confirm{margin-top:20px;color:#0f0;text-align:center}
     footer{background:var(--blue);text-align:center;padding:20px;margin-top:60px}
   </style>
@@ -31,12 +32,9 @@
 <h2 style="text-align:center;margin-top:30px">Zgjidh Paketën</h2>
 <div id="confirm"></div>
 
-<!-- ===== PRODUKTET =================================================== -->
 <div id="products"></div>
 
-<!-- ===== SCRIPT ====================================================== -->
 <script>
-/* 1. Të dhënat e paketave */
 const products = {
   "30":  { uc:30,   price:0.55,  productId:"ID_30_UC"                 },
   "60":  { uc:60,   price:0.79,  productId:"1938299181721538561"      },
@@ -47,7 +45,6 @@ const products = {
   "8100":{ uc:8100, price:80.00, productId:"1909194994574553089"      }
 };
 
-/* 2. Krijo kartat në DOM */
 const container = document.getElementById("products");
 for (const key in products) {
   const p = products[key];
@@ -57,10 +54,10 @@ for (const key in products) {
       <h2>${p.uc} UC – €${p.price.toFixed(2)}</h2>
       <input type="text" id="pubg${key}" placeholder="Shkruaj PUBG ID">
       <button class="btn-stripe" onclick="pay('${key}')">Paguaj me kartë 💳</button>
+      ${p.price < 5 ? '<p class="fee-note">+0.15 € tarifë për përpunim pagese</p>' : ''}
     </div>`;
 }
 
-/* 3. Funksioni pay() */
 function pay(key){
   const pubgId = document.getElementById("pubg"+key).value.trim();
   if(!pubgId){
