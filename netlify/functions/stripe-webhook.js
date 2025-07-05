@@ -1,4 +1,3 @@
-
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const fetch  = require('node-fetch');
 
@@ -50,6 +49,7 @@ exports.handler = async (event) => {
   return { statusCode: 200, body: 'ok' };
 };
 
+// FUNKSIONI QË BËN DËRGIMIN E UC
 async function sendUC(pubgId, ucAmount){
   const spuMap = {
     "30"  : 123456789,
@@ -80,8 +80,9 @@ async function sendUC(pubgId, ucAmount){
   });
 
   const data = await res.json();
-console.log('📦 Përgjigja nga U7BUY:', data);
+  console.log('📦 Përgjigja nga U7BUY:', data);
 
-if (data.code !== '000000') {
-  throw new Error(data.message || 'Gabim nga U7BUY');
+  if (data.code !== '000000') {
+    throw new Error(data.message || 'Gabim nga U7BUY');
+  }
 }
