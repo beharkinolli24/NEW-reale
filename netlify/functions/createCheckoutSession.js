@@ -1,21 +1,19 @@
-// netlify/functions/createCheckoutSession.js
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
-  /* ── 1. Lejo vetëm POST ─────────────────────────── */
+  /* ── 1. Vetëm POST ──────────────────────────────── */
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Only POST allowed' };
   }
 
-  /* ── 2. Lexo body ────────────────────────────────── */
-  let payload;
-  try {
-    payload = JSON.parse(event.body || '{}');
-  } catch {
-    return { statusCode: 400, body: 'Body must be JSON' };
-  }
+  /* ── 2. Parsimi i body ──────────────────────────── */
+  let body;
+  try { body = JSON.parse(event.body || '{}'); }
+  catch { return { statusCode: 400, body: 'Body must be JSON' }; }
 
-  const { playerId, ucAmount, price } = payload;
+  const { playerId, ucAmount, amount } = body;
+  const price = amount;                               // ruaj si price
+
   if (!playerId || !ucAmount || !price) {
     return { statusCode: 400, body: 'Missing fields' };
   }
@@ -29,26 +27,20 @@ exports.handler = async (event) => {
         price_data: {
           currency: 'eur',
           product_data: { name: `${ucAmount} UC – PUBG Mobile` },
-          unit_amount: Math.round(price * 100)  // € → centë
+          unit_amount: Math.round(price * 100)          // € → cent
         },
         quantity: 1
       }],
       payment_intent_data: {
-        capture_method: 'manual'   // 🔑  Bllokon shumën, pagesa nuk kapet automatikisht
+        capture_method: 'manual'                        // vetëm authorisation
       },
       metadata: { playerId, ucAmount },
       success_url: 'https://trustucshop.com/success',
       cancel_url:  'https://trustucshop.com/cancel'
     });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ url: session.url })
-    };
+    return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
