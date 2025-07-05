@@ -1,26 +1,104 @@
-<!-- vetëm fragmenti i fetch-it është ndryshuar -->
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TRUST UC – UC për PUBG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --blue:#2e89ff; --dark:#1a1a1a; --bg:#0b0f1a }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#fff}
+    body   {background:var(--bg)}
+    header {background:linear-gradient(135deg,var(--blue),#174ea6);text-align:center;padding:40px 20px}
+    header h1{font-size:2.6em;background:linear-gradient(to right,var(--blue),#00c9ff);-webkit-background-clip:text;color:transparent}
+    .product{background:var(--dark);padding:20px;margin:30px auto;border-radius:12px;text-align:center;width:90%;max-width:400px}
+    .product img{width:120px}
+    input{padding:10px;border-radius:6px;border:none;width:80%;margin-top:12px;color:#000}
+    .btn-stripe{background:var(--blue);padding:12px 24px;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:14px}
+    .btn-stripe:hover{background:#1c6dd0}
+    #confirm{margin-top:20px;color:#0f0;text-align:center}
+    footer{background:var(--blue);text-align:center;padding:20px;margin-top:60px}
+  </style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="TRUST UC Logo" style="max-width:100px;margin-bottom:10px">
+  <h1>TRUST UC</h1>
+  <p>Bli UC për PUBG Mobile – Pagesë me kartë & dorëzim manual</p>
+</header>
+
+<h2 style="text-align:center;margin-top:30px">Zgjidh Paketën</h2>
+<div id="confirm"></div>
+<div id="products"></div>
+
 <script>
+/* ▼ konfigurimi i pakove -------------------------------------------------- */
+const products = {
+  "30":  { uc: 30,  price: 0.55 },
+  "60":  { uc: 60,  price: 0.79 },
+  "325": { uc: 325, price: 4.10 },
+  "660": { uc: 660, price: 8.10 },
+  "1800":{ uc: 1800, price: 20.50 },
+  "3850":{ uc: 3850, price: 41.50 },
+  "8100":{ uc: 8100, price: 80.00 }
+};
+/* ------------------------------------------------------------------------- */
+
+/* Renders the product cards */
+const container = document.getElementById("products");
+for (const key in products) {
+  const p = products[key];
+  container.innerHTML += `
+    <div class="product">
+      <img src="uc${p.uc}.png" alt="${p.uc} UC">
+      <h2>${p.uc} UC – €${p.price.toFixed(2)}</h2>
+      <input type="text" id="pubg${key}" placeholder="Shkruaj vetëm PUBG ID">
+      <button class="btn-stripe" onclick="pay('${key}')">Paguaj me kartë 💳</button>
+    </div>`;
+}
+
+/* Kryen ruajtjen + Stripe Checkout */
 function pay(key){
   const pubgId = document.getElementById("pubg"+key).value.trim();
   if(!pubgId){ alert("Plotëso PUBG ID."); return; }
 
-  const item  = products[key];
-  const price = parseFloat(item.price);
+  const item   = products[key];
+  const amount = Number(item.price);
 
-  fetch("/.netlify/functions/createCheckoutSession",{     <!-- ✅ emri i ri -->
+  /* 1 ▸ Ruaje porosinë në Google Sheet (proxy) */
+  fetch("https://trustuc-proxy.onrender.com/submit",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
-      playerId : pubgId,
-      ucAmount : item.uc,
-      amount   : price
+      pubg_id : pubgId,
+      paketa  : `${item.uc} UC`,
+      shuma   : amount
     })
+  })
+  .then(() => {
+    document.getElementById("confirm").innerText =
+      "✅ Porosia u ruajt. Po kaloni në pagesë…";
+
+    /* 2 ▸ Krijo Stripe Checkout session */
+    return fetch("/.netlify/functions/createCheckoutSession",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        playerId : pubgId,
+        ucAmount : item.uc,
+        amount
+      })
+    });
   })
   .then(r => r.json())
   .then(d => {
-    if(!d.url){ alert("❌ "+(d.error||'Nuk u krijua session.')); return; }
-    window.location = d.url;
+    if(!d.url){ throw new Error(d.error || "Nuk u krijua sesioni"); }
+    window.location = d.url;          // ridrejtim në Stripe Checkout
   })
-  .catch(err => alert("Error: "+err.message));
+  .catch(err => alert("❌ Error: "+err.message));
 }
 </script>
+
+<footer>© 2025 TRUST UC – Të gjitha të drejtat e rezervuara</footer>
+</body>
+</html>
