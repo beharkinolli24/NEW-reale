@@ -1,5 +1,6 @@
 // netlify/functions/startDelivery.js
 exports.handler = async (event) => {
+  /* 1 ▸ Lejo vetëm POST */
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -7,10 +8,11 @@ exports.handler = async (event) => {
     };
   }
 
+  /* 2 ▸ Merr body-n si JSON */
   let parsed;
   try {
     parsed = JSON.parse(event.body);
-  } catch (err) {
+  } catch {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Body must be valid JSON' })
@@ -27,6 +29,7 @@ exports.handler = async (event) => {
     };
   }
 
+  /* 3 ▸ API-key nga env vars */
   const API_KEY = process.env.U7BUY_API_KEY;
   if (!API_KEY) {
     console.error('❌ Env var U7BUY_API_KEY mungon!');
@@ -38,15 +41,12 @@ exports.handler = async (event) => {
     };
   }
 
+  /* 4 ▸ Thirrja tek U7BUY Open-API */
   try {
-    console.log('👉 Po dërgojmë kërkesë:', {
-      productId,
-      playerId,
-      serverId
-    });
+    console.log('👉 Po dërgojmë kërkesë:', { productId, playerId, serverId });
 
     const response = await fetch(
-      'https://www.u7buy.com/open-api/order/start_delivery', // ✅ URL E SAKTË
+      'https://www.u7buy.com/open-api/order/start_delivery',
       {
         method: 'POST',
         headers: {
@@ -57,30 +57,26 @@ exports.handler = async (event) => {
       }
     );
 
-    console.log('🔙 Status nga U7BUY:', response.status);
+    /* 5 ▸ Lexo përgjigjen si tekst + provo JSON */
+    const raw = await response.text();
+    let data = null;
+    try { data = JSON.parse(raw); } catch { /* jo JSON */ }
 
-    const data = await response.json().catch(() => null);
+    console.log('🔙 Status:', response.status);
+    console.log('🔙 Body  :', raw);
 
     if (response.ok && data && data.status === 'success') {
-      console.log('✅ UC u dërgua me sukses', data);
+      console.log('✅ UC u dërgua me sukses');
       return {
         statusCode: 200,
-        body: JSON.stringify({
-          ok: true,
-          message: 'UC u dërgua me sukses',
-          data
-        })
+        body: JSON.stringify({ ok: true, message: 'UC u dërgua me sukses', data })
       };
     }
 
-    console.warn('⚠️ Dërgimi dështoi', data);
+    console.warn('⚠️  Dërgimi dështoi');
     return {
       statusCode: 400,
-      body: JSON.stringify({
-        ok: false,
-        message: 'Dërgimi dështoi',
-        data
-      })
+      body: JSON.stringify({ ok: false, message: 'Dërgimi dështoi', data })
     };
   } catch (err) {
     console.error('❌ Fetch failed:', err.message);
