@@ -80,5 +80,8 @@ async function sendUC(pubgId, ucAmount){
   });
 
   const data = await res.json();
-  if (data.code !== '000000') throw new Error(data.message || 'U7BUY error');
+console.log('📦 Përgjigja nga U7BUY:', data);
+
+if (data.code !== '000000') {
+  throw new Error(data.message || 'Gabim nga U7BUY');
 }
