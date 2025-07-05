@@ -39,7 +39,7 @@ exports.handler = async (event) => {
 
   /* ── 4. Thirrja tek U7BUY API ───────────────────────── */
   try {
-    const response = await fetch('https://api.u7buy.com/order/start_delivery', {
+    const response = await fetch(https://open-api.u7buy.com/api/order/start_delivery', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${API_KEY}`,
