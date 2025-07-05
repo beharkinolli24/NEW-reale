@@ -1,6 +1,5 @@
 // netlify/functions/startDelivery.js
 exports.handler = async (event) => {
-  /* ── 1. Lejo vetëm POST ─────────────────────────────── */
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -8,11 +7,10 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 2. Merr të dhënat nga body ─────────────────────── */
   let parsed;
   try {
     parsed = JSON.parse(event.body);
-  } catch {
+  } catch (err) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Body must be valid JSON' })
@@ -29,7 +27,6 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 3. Lexo API-key nga env vars ───────────────────── */
   const API_KEY = process.env.U7BUY_API_KEY;
   if (!API_KEY) {
     console.error('❌ Env var U7BUY_API_KEY mungon!');
@@ -41,12 +38,15 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 4. Thirrja tek U7BUY Open-API ──────────────────── */
   try {
-    console.log('👉 Po dërgojmë kërkesë:', { productId, playerId, serverId });
+    console.log('👉 Po dërgojmë kërkesë:', {
+      productId,
+      playerId,
+      serverId
+    });
 
     const response = await fetch(
-      'https://www.u7buy.com/open-api/order/start_delivery',   // ✅ endpoint i saktë
+      'https://www.u7buy.com/open-api/order/start_delivery', // ✅ URL E SAKTË
       {
         method: 'POST',
         headers: {
@@ -73,7 +73,7 @@ exports.handler = async (event) => {
       };
     }
 
-    console.warn('⚠️  Dërgimi dështoi', data);
+    console.warn('⚠️ Dërgimi dështoi', data);
     return {
       statusCode: 400,
       body: JSON.stringify({
