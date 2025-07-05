@@ -28,7 +28,8 @@ exports.handler = async (event) => {
   }
 
   /* ── 3. Çelësi i U7BUY merret nga Environment Vars ─── */
-  const API_KEY = process.env.U7BUY_KEY;             // ↖︎ fute në Netlify → Site → Environment variables
+  const API_KEY = process.env.U7BUY_API_KEY;
+             // ↖︎ fute në Netlify → Site → Environment variables
   if (!API_KEY) {
     return {
       statusCode: 500,
