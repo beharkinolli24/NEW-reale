@@ -8,7 +8,10 @@ exports.handler = async (event) => {
   try {
     const { productId, ucAmount, amount, playerId, email } = JSON.parse(event.body);
 
+    console.log("🟢 Received body:", { productId, ucAmount, amount, playerId, email });
+
     if (![productId, ucAmount, amount, playerId].every(Boolean)) {
+      console.error("🔴 Missing fields in body!");
       return { statusCode: 400, body: 'Missing fields' };
     }
 
@@ -18,7 +21,7 @@ exports.handler = async (event) => {
       line_items: [{
         price_data: {
           currency: 'eur',
-          unit_amount: Math.round(amount * 100),
+          unit_amount: Math.round(parseFloat(amount) * 100),
           product_data: {
             name: `${ucAmount} UC – PUBG`,
             description: `PUBG ID: ${playerId}`
@@ -31,9 +34,22 @@ exports.handler = async (event) => {
       metadata: { productId, ucAmount, playerId, email }
     });
 
-    return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
+    console.log("🟢 Session created:", session.id);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ url: session.url })
+    };
+
   } catch (err) {
-    console.error("Stripe error", err);
-    return { statusCode: 500, body: JSON.stringify({ error: "Stripe session error" }) };
+    console.error("🔴 Stripe error:", err.message);
+    if (err.param) console.error("🔴 Param:", err.param);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: err.message,
+        param: err.param || null
+      })
+    };
   }
 };
