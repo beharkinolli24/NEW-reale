@@ -1,6 +1,6 @@
 // netlify/functions/startDelivery.js
 exports.handler = async (event) => {
-  /* ── 1. Lejo vetëm POST ――――――――――――――――――――――――――――――― */
+  /* ── 1. Lejo vetëm POST ─────────────────────────────── */
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -8,7 +8,7 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 2. Merr të dhënat nga body ――――――――――――――――――――――― */
+  /* ── 2. Merr të dhënat nga body ─────────────────────── */
   let parsed;
   try {
     parsed = JSON.parse(event.body);
@@ -29,9 +29,10 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 3. Lexo API-key nga env vars ――――――――――――――――――――― */
-  const API_KEY = process.env.U7BUY_API_KEY;   // emri sipas Netlify
+  /* ── 3. Lexo API-key nga env vars ───────────────────── */
+  const API_KEY = process.env.U7BUY_API_KEY;
   if (!API_KEY) {
+    console.error('❌ Env var U7BUY_API_KEY mungon!');
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -40,8 +41,14 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 4. Thirrja tek U7BUY Open API ――――――――――――――――――― */
+  /* ── 4. Thirrja tek U7BUY Open API ──────────────────── */
   try {
+    console.log('👉 Po dërgojmë kërkesë:', {
+      productId,
+      playerId,
+      serverId
+    });
+
     const response = await fetch(
       'https://open-api.u7buy.com/api/order/start_delivery',
       {
@@ -54,10 +61,12 @@ exports.handler = async (event) => {
       }
     );
 
-    const data = await response.json();
+    console.log('🔙 Status nga U7BUY:', response.status);
 
-    /* ── 5. Përgjigjja ――――――――――――――――――――――――――――――― */
-    if (response.ok && data.status === 'success') {
+    const data = await response.json().catch(() => null);
+
+    if (response.ok && data && data.status === 'success') {
+      console.log('✅ UC u dërgua me sukses', data);
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -68,6 +77,7 @@ exports.handler = async (event) => {
       };
     }
 
+    console.warn('⚠️ Dërgimi dështoi', data);
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -77,9 +87,10 @@ exports.handler = async (event) => {
       })
     };
   } catch (err) {
+    console.error('❌ Fetch failed:', err.message);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message })
+      body: JSON.stringify({ error: err.message || 'fetch failed' })
     };
   }
 };
