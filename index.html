@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sq">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TRUST UC – UC PUBG</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TRUST UC – UC për PUBG</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root { --blue:#2e89ff; --dark:#1a1a1a; --bg:#0b0f1a }
+    :root { --blue: #2e89ff; --dark: #1a1a1a; --bg: #0b0f1a }
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#fff}
     body   {background:var(--bg)}
     header {background:linear-gradient(135deg,var(--blue),#174ea6);text-align:center;padding:40px 20px}
     header h1{font-size:2.6em;background:linear-gradient(to right,var(--blue),#00c9ff);-webkit-background-clip:text;color:transparent}
-    .product{background:var(--dark);padding:20px;margin:30px auto;border-radius:12px;text-align:center;width:90%;max-width:380px}
-    .product img{width:140px}
-    input{padding:8px;border-radius:6px;border:none;width:70%;max-width:260px;margin-top:10px;color:#000}
+    .product{background:var(--dark);padding:20px;margin:30px auto;border-radius:12px;text-align:center;width:90%;max-width:400px}
+    .product img{width:120px}
+    input{padding:10px;border-radius:6px;border:none;width:80%;margin-top:12px;color:#000}
     .btn-stripe{background:var(--blue);padding:12px 24px;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:14px}
     .btn-stripe:hover{background:#1c6dd0}
     .fee-note{font-size:.9em;color:#ccc;margin-top:6px;}
@@ -24,9 +23,9 @@
 </head>
 <body>
 <header>
-  <img src="logo.png" alt="TRUST UC Logo" style="max-width:120px;margin-bottom:10px">
+  <img src="logo.png" alt="TRUST UC Logo" style="max-width:100px;margin-bottom:10px">
   <h1>TRUST UC</h1>
-  <p>Bli UC për PUBG Mobile me çmimet më të mira dhe dorëzim brenda 15 minutave</p>
+  <p>Bli UC për PUBG Mobile – Pagesë me kartë & dorëzim manual</p>
 </header>
 
 <h2 style="text-align:center;margin-top:30px">Zgjidh Paketën</h2>
@@ -35,12 +34,13 @@
 
 <script>
 const products = {
-  "60":  { uc:60,   price:0.79  },
-  "325": { uc:325,  price:4.10  },
-  "660": { uc:660,  price:8.10  },
-  "1800":{ uc:1800, price:20.50 },
-  "3850":{ uc:3850, price:41.50 },
-  "8100":{ uc:8100, price:80.00 }
+  "30":  { uc:30,   price:0.55,  productId:"ID_30"                 },
+  "60":  { uc:60,   price:0.79,  productId:"1938299181721538561"  },
+  "325": { uc:325,  price:4.20,  productId:"1938299181721538561"  },
+  "660": { uc:660,  price:8.10,  productId:"1938300815303401474"  },
+  "1800":{ uc:1800, price:20.50, productId:"1931436511665717249"  },
+  "3850":{ uc:3850, price:41.50, productId:"1898646498683515844"  },
+  "8100":{ uc:8100, price:80.00, productId:"1909194994574553089"  }
 };
 
 const container = document.getElementById("products");
@@ -50,36 +50,59 @@ for (const key in products) {
     <div class="product">
       <img src="uc${p.uc}.png" alt="${p.uc} UC">
       <h2>${p.uc} UC – €${p.price.toFixed(2)}</h2>
-      <input type="text" id="pubg${key}" placeholder="Shkruaj PUBG ID">
+      <input type="text" id="pubg${key}" placeholder="Shkruaj vetëm PUBG ID">
       <button class="btn-stripe" onclick="pay('${key}')">Paguaj me kartë 💳</button>
+      ${p.price < 5 ? '<p class="fee-note">+0.15 € tarifë për përpunim pagese</p>' : ''}
     </div>`;
 }
 
 function pay(key){
   const pubgId = document.getElementById("pubg"+key).value.trim();
-  if(!pubgId){ alert("Plotëso PUBG ID."); return; }
+  if(!pubgId){
+    alert("Plotëso PUBG ID.");
+    return;
+  }
 
-  const item  = products[key];
-  const price = parseFloat(item.price);
+  const item = products[key];
+  const priceFixed = parseFloat(item.price.toString().replace(",", "."));
 
-  fetch("/.netlify/functions/createCheckoutSession",{
+  fetch("https://trustuc-proxy.onrender.com/submit",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
-      playerId : pubgId,
-      ucAmount : item.uc,
-      price
+      pubg_id :pubgId,
+      paketa  :`${item.uc} UC`,
+      shuma   :priceFixed
     })
   })
-  .then(r => r.json())
-  .then(d => {
-    if(d.url){ window.location = d.url; }
-    else { alert("Gabim: " + (d.error || "Session nuk u krijua")); }
+  .then(()=>{
+    document.getElementById("confirm").innerText = "✅ Porosia u ruajt. Po kaloni në pagesë…";
+
+    return fetch("/.netlify/functions/createCheckoutSession",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        productId : item.productId,
+        ucAmount  : item.uc,
+        amount    : priceFixed,
+        playerId  : pubgId
+      })
+    });
   })
-  .catch(err => alert("Gabim rrjeti: "+err.message));
+  .then(r => r.json().then(data => ({ status: r.status, data })))
+  .then(({ status, data }) => {
+    if (status !== 200 || !data.url) {
+      alert("❌ Gabim: " + (data.error || "Nuk u krijua sesioni"));
+      return;
+    }
+    window.location.href = data.url;
+  })
+  .catch(err => {
+    alert("❌ Error: " + err.message);
+  });
 }
 </script>
 
-<footer>© 2025 TRUST UC | Të gjitha të drejtat e rezervuara</footer>
+<footer>© 2025 TRUST UC – Të gjitha të drejtat e rezervuara</footer>
 </body>
 </html>
