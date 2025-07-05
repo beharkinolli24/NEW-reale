@@ -1,6 +1,10 @@
 {
+  "name": "trustucshop-auto-lite",
+  "version": "1.0.0",
+  "description": "Semi-automatic UC delivery – Stripe + Google Sheets + email",
+  "license": "MIT",
   "dependencies": {
-    "stripe": "^12.0.0",
+    "stripe": "^12.15.0",
     "googleapis": "^133.0.0",
     "nodemailer": "^6.9.0"
   }
