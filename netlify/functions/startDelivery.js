@@ -1,55 +1,49 @@
 // netlify/functions/startDelivery.js
 exports.handler = async (event) => {
+  /* 1 ▸ Lejo vetëm POST */
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Only POST allowed' };
+    return { statusCode: 405, body: 'Only POST requests allowed' };
   }
 
-  let parsed;
-  try {
-    parsed = JSON.parse(event.body);
-  } catch {
-    return { statusCode: 400, body: 'Body must be valid JSON' };
-  }
+  /* 2 ▸ Parsing */
+  let dataIn;
+  try { dataIn = JSON.parse(event.body); }
+  catch { return { statusCode: 400, body: 'Body must be valid JSON' }; }
 
-  const { productId, playerId, serverId } = parsed;
+  const { productId, playerId, serverId } = dataIn;
   if (!productId || !playerId || !serverId) {
     return { statusCode: 400, body: 'productId, playerId, serverId required' };
   }
 
-  /*  --- TOKENI YT ---  */
-  const BASIC_TOKEN = 'dTdidXk4MGQ0ZDRmMjM1MTIzMjc1OndtU3pUM0VyUDZlN2pZbE9PR2prUzFxWEtESElzV0tBelJTVEc0OUY=';
+  /* 3 ▸ Token Basic64 nga env vars */
+  const TOKEN = process.env.U7BUY_B64_TOKEN;   // vendose në Netlify
+  if (!TOKEN) { return { statusCode: 500, body: 'U7BUY_B64_TOKEN missing' }; }
+
+  /* 4 ▸ Thirrja drejt prod-api */
+  const url =
+    'https://openapi.u7buy.com/prod-api/open-api/order/start_delivery';
 
   try {
-    const response = await fetch(
-      'https://openapi.u7buy.com/prod-api/order/start_delivery',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${BASIC_TOKEN}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({
-          bo: { productId, playerId, serverId }
-        })
-      }
-    );
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${TOKEN}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        bo: { productId, playerId, serverId }   // ← formati që kërkon API
+      })
+    });
 
-    const raw = await response.text();
-    let data = null;
-    try { data = JSON.parse(raw); } catch {}
+    const raw = await res.text();
+    let data; try { data = JSON.parse(raw); } catch { /* non-JSON */ }
 
-    if (response.ok && data && data.code === 200) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ ok: true, data })
-      };
+    if (res.ok && data?.code === 200) {
+      return { statusCode: 200, body: raw };
     }
+    return { statusCode: res.status, body: raw };
 
-    return {
-      statusCode: response.status,
-      body: JSON.stringify({ ok: false, raw })
-    };
   } catch (err) {
     return { statusCode: 500, body: err.message };
   }
