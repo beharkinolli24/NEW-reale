@@ -12,7 +12,7 @@ exports.handler = async (event) => {
   let parsed;
   try {
     parsed = JSON.parse(event.body);
-  } catch (err) {
+  } catch {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Body must be valid JSON' })
@@ -41,16 +41,12 @@ exports.handler = async (event) => {
     };
   }
 
-  /* ── 4. Thirrja tek U7BUY Open API ──────────────────── */
+  /* ── 4. Thirrja tek U7BUY Open-API ──────────────────── */
   try {
-    console.log('👉 Po dërgojmë kërkesë:', {
-      productId,
-      playerId,
-      serverId
-    });
+    console.log('👉 Po dërgojmë kërkesë:', { productId, playerId, serverId });
 
     const response = await fetch(
-      'https://open-api.u7buy.com/api/order/start_delivery',
+      'https://www.u7buy.com/open-api/order/start_delivery',   // ✅ endpoint i saktë
       {
         method: 'POST',
         headers: {
@@ -77,7 +73,7 @@ exports.handler = async (event) => {
       };
     }
 
-    console.warn('⚠️ Dërgimi dështoi', data);
+    console.warn('⚠️  Dërgimi dështoi', data);
     return {
       statusCode: 400,
       body: JSON.stringify({
