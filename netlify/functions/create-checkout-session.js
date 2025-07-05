@@ -1,4 +1,3 @@
-
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
@@ -16,20 +15,41 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: 'Missing fields' };
     }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [{
+    const numericAmount = parseFloat(amount);
+    const surcharge = numericAmount < 5 ? 0.15 : 0;
+
+    const lineItems = [
+      {
         price_data: {
           currency: 'eur',
-          unit_amount: Math.round(parseFloat(amount) * 100),
+          unit_amount: Math.round(numericAmount * 100),
           product_data: {
             name: `${ucAmount} UC – PUBG`,
             description: `PUBG ID: ${playerId}`
           }
         },
         quantity: 1
-      }],
+      }
+    ];
+
+    if (surcharge > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'eur',
+          unit_amount: Math.round(surcharge * 100),
+          product_data: {
+            name: 'Tarifë për përpunim pagese',
+            description: 'Shtesë për kartë / Stripe'
+          }
+        },
+        quantity: 1
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: lineItems,
       success_url: `https://trustucshop.com/success.html`,
       cancel_url: `https://trustucshop.com/cancel.html`,
       metadata: { productId, ucAmount, playerId, email }
