@@ -63,16 +63,16 @@ function pay(key){
   if(!pubgId){ alert("Plotëso PUBG ID."); return; }
 
   const item   = products[key];
-  const amount = Number(item.price);
+  const priceEur = Number(item.price);
 
-  /* 1 ▸ Ruaje porosinë në Google Sheet (proxy) */
+  /* 1 ▸ (Opsionale) ruaje paraprakisht në Sheets përmes proxy-t tënd */
   fetch("https://trustuc-proxy.onrender.com/submit",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
       pubg_id : pubgId,
       paketa  : `${item.uc} UC`,
-      shuma   : amount
+      shuma   : priceEur
     })
   })
   .then(() => {
@@ -84,9 +84,9 @@ function pay(key){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({
-        playerId : pubgId,
-        ucAmount : item.uc,
-        amount
+        playerId    : pubgId,
+        priceEur    : priceEur,
+        packageName : `${item.uc} UC`
       })
     });
   })
