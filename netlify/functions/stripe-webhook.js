@@ -1,63 +1,101 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { google } = require('googleapis');
-const nodemailer = require('nodemailer');
+import Stripe from 'stripe';
+import { google } from 'googleapis';
+import nodemailer from 'nodemailer';
+import { Readable } from 'stream';
 
-exports.handler = async (event) => {
-  const sig = event.headers['stripe-signature'];
-  let stripeEvent;
+export const config = { api: { bodyParser: false } };
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-10-16',
+});
+
+// ➜ Ruajtja në Google Sheets
+async function appendToSheet(row) {
+  const auth = new google.auth.JWT(
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    null,
+    process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    ['https://www.googleapis.com/auth/spreadsheets']
+  );
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: process.env.SHEET_ID,
+    range: 'A1',
+    valueInputOption: 'USER_ENTERED',
+    requestBody: { values: [row] },
+  });
+}
+
+// ➜ Dërgimi i e-mailit
+async function sendNotification({ subject, text }) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+  });
+  await transporter.sendMail({
+    from: '"Trust UC Shop" <no-reply@trustucshop.com>',
+    to: process.env.NOTIFY_EMAIL,
+    subject,
+    text,
+  });
+}
+
+// ➜ Konverton stream-in raw të trupit
+function buffer(readable) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    readable.on('data', (c) => chunks.push(c));
+    readable.on('end', () => resolve(Buffer.concat(chunks)));
+    readable.on('error', reject);
+  });
+}
+
+export default async function handler(req, res) {
+  let event;
 
   try {
-    stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
+    const rawBody = await buffer(req);
+    const sig = req.headers['stripe-signature'];
+    event = stripe.webhooks.constructEvent(
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-  } catch (e) {
-    return { statusCode: 400, body: `Webhook error: ${e.message}` };
+  } catch (err) {
+    console.error('Webhook signature failed', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  if (stripeEvent.type !== 'checkout.session.completed') {
-    return { statusCode: 200, body: 'Event ignored' };
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const { metadata, amount_total, customer_details } = session;
+
+    // 1️⃣ Sheets
+    try {
+      await appendToSheet([
+        new Date().toISOString(),     // Datë
+        metadata.package,             // Paketa (p.sh. 60 UC)
+        metadata.playerId,            // Player ID
+        customer_details.email,       // Emaili i klientit
+        amount_total / 100,           // Shuma €
+      ]);
+    } catch (err) {
+      console.error('Sheets error', err);
+    }
+
+    // 2️⃣ E-mail njoftues
+    try {
+      await sendNotification({
+        subject: `Porosi e re – ${metadata.package}`,
+        text: `Player ID: ${metadata.playerId}
+Email klienti: ${customer_details.email}
+Shuma: €${amount_total / 100}`,
+      });
+    } catch (err) {
+      console.error('Email error', err);
+    }
   }
 
-  const s        = stripeEvent.data.object;
-  const playerId = s.metadata.playerId;
-  const ucAmount = s.metadata.ucAmount;
-  const email    = s.customer_details?.email || 'N/A';
-
-  /* 1 ▸ Shkruaj në Google Sheet */
-  const auth = new google.auth.JWT(
-    process.env.GS_CLIENT_EMAIL,
-    null,
-    process.env.GS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    ['https://www.googleapis.com/auth/spreadsheets']
-  );
-
-  const sheets = google.sheets({ version: 'v4', auth });
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GS_SHEET_ID,
-    range: 'Orders!A:E',
-    valueInputOption: 'USER_ENTERED',
-    requestBody: {
-      values: [[new Date().toISOString(), playerId, ucAmount, email, s.payment_intent]]
-    }
-  });
-
-  /* 2 ▸ Dërgo email njoftimi */
-  const mailer = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.NOTIFY_EMAIL,
-      pass: process.env.NOTIFY_PASS
-    }
-  });
-
-  await mailer.sendMail({
-    from: process.env.NOTIFY_EMAIL,
-    to:   process.env.NOTIFY_EMAIL,
-    subject: `🛒 Porosi e re – ${ucAmount} UC`,
-    text: `Player ID: ${playerId}\nPako: ${ucAmount} UC\nEmail klienti: ${email}`
-  });
-
-  return { statusCode: 200, body: 'ok' };
-};
+  res.status(200).json({ received: true });
+}
