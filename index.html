@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TRUST UC – UC për PUBG</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
 
-  <!-- ✅ Google Analytics -->
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7VEN3DVYQ5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -42,67 +42,65 @@
 <div id="products"></div>
 
 <script>
-/* ▼ konfigurimi i pakove -------------------------------------------------- */
+/* ▼ paketat -------------------------------------------------- */
 const products = {
   "30":  { uc: 30,  price: 0.55 },
   "60":  { uc: 60,  price: 0.79 },
   "325": { uc: 325, price: 4.10 },
   "660": { uc: 660, price: 8.10 },
 };
-/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------ */
 
-/* Renders the product cards */
+/* Krijon kartat */
 const container = document.getElementById("products");
-for (const key in products) {
-  const p = products[key];
-  container.innerHTML += `
+Object.entries(products).forEach(([key, p])=>{
+  container.insertAdjacentHTML('beforeend',`
     <div class="product">
       <img src="uc${p.uc}.png" alt="${p.uc} UC">
       <h2>${p.uc} UC – €${p.price.toFixed(2)}</h2>
       <input type="text" id="pubg${key}" placeholder="Shkruaj vetëm PUBG ID">
       <button class="btn-stripe" onclick="pay('${key}')">Paguaj me kartë 💳</button>
-    </div>`;
-}
+    </div>`);
+});
 
-/* Kryen ruajtjen + Stripe Checkout */
+/* Ruajtje + Checkout */
 function pay(key){
-  const pubgId = document.getElementById("pubg"+key).value.trim();
-  if(!pubgId){ alert("Plotëso PUBG ID."); return; }
+  const pubgId = document.getElementById('pubg'+key).value.trim();
+  if(!pubgId){ alert('Plotëso PUBG ID.'); return; }
 
-  const item   = products[key];
-  const amount = Number(item.price);
+  const { uc, price } = products[key];
 
-  /* 1 ▸ Ruaje porosinë në Google Sheet (proxy) */
-  fetch("https://trustuc-proxy.onrender.com/submit",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
+  /* 1️⃣ ruaj në Sheet (proxy) */
+  fetch('https://trustuc-proxy.onrender.com/submit',{
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
     body:JSON.stringify({
       pubg_id : pubgId,
-      paketa  : `${item.uc} UC`,
-      shuma   : amount
+      paketa  : `${uc} UC`,
+      shuma   : price
     })
   })
-  .then(() => {
-    document.getElementById("confirm").innerText =
-      "✅ Porosia u ruajt. Po kaloni në pagesë…";
+  .then(()=> {
+    document.getElementById('confirm').innerText =
+      '✅ Porosia u ruajt. Po kaloni në pagesë…';
 
-    /* 2 ▸ Krijo Stripe Checkout session */
-    return fetch("/.netlify/functions/createCheckoutSession",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
+    /* 2️⃣ krijo sesion Stripe */
+    return fetch('/.netlify/functions/createCheckoutSession',{
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
       body:JSON.stringify({
-        playerId : pubgId,
-        ucAmount : item.uc,
-        amount
+        playerId    : pubgId,
+        priceEur    : price,
+        packageName : `${uc} UC`
       })
     });
   })
-  .then(r => r.json())
-  .then(d => {
-    if(!d.url){ throw new Error(d.error || "Nuk u krijua sesioni"); }
-    window.location = d.url;          // ridrejtim në Stripe Checkout
+  .then(r=>r.json())
+  .then(d=>{
+    if(!d.url) throw new Error(d.error||'Nuk u krijua sesioni');
+    window.location = d.url;
   })
-  .catch(err => alert("❌ Error: "+err.message));
+  .catch(err=>alert('❌ Error: '+err.message));
 }
 </script>
 
