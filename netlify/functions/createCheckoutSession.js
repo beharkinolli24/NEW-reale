@@ -1,16 +1,29 @@
-import Stripe from 'stripe';
-
+// netlify/functions/createCheckoutSession.js
+const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2023-10-16'
 });
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
+exports.handler = async (event) => {
+  // Prano vetëm POST
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
+  // Netlify e jep body-n si string (apo objekt, varet nga bundler) – thjesht sigurohemi.
+  let data;
+  try {
+    data = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
+  } catch {
+    return { statusCode: 400, body: 'Invalid JSON body' };
+  }
+
+  const { priceEur, playerId, packageName } = data || {};
+  if (!priceEur || !playerId || !packageName) {
+    return { statusCode: 400, body: 'Missing parameters' };
+  }
 
   try {
-    // Nga body merr çmimin, playerId dhe emrin e paketës
-    const { priceEur, playerId, packageName } = JSON.parse(req.body);
-
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
@@ -19,20 +32,23 @@ export default async function handler(req, res) {
           price_data: {
             currency: 'eur',
             product_data: { name: `${packageName} – PUBG Mobile` },
-            unit_amount: Math.round(priceEur * 100), // €0.55 → 55
+            unit_amount: Math.round(Number(priceEur) * 100) // € → cent
           },
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
       metadata: { playerId, package: packageName },
-      payment_intent_data: { capture_method: 'automatic' }, // kapet menjëherë
-      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/cancel`,
+      payment_intent_data: { capture_method: 'automatic' },
+      success_url: `${process.env.DOMAIN}/success`,
+      cancel_url : `${process.env.DOMAIN}/cancel`
     });
 
-    res.status(200).json({ url: session.url });
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ url: session.url })
+    };
   } catch (err) {
     console.error('Stripe error', err);
-    res.status(500).json({ error: 'Stripe session error' });
+    return { statusCode: 500, body: 'Stripe error' };
   }
-}
+};
