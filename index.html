@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TRUST UC – UC për PUBG</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7VEN3DVYQ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7VEN3DVYQ5');
+  </script>
+
   <style>
     :root { --blue:#2e89ff; --dark:#1a1a1a; --bg:#0b0f1a }
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;color:#fff}
@@ -38,7 +48,6 @@ const products = {
   "60":  { uc: 60,  price: 0.79 },
   "325": { uc: 325, price: 4.10 },
   "660": { uc: 660, price: 8.10 },
-
 };
 /* ------------------------------------------------------------------------- */
 
@@ -61,16 +70,16 @@ function pay(key){
   if(!pubgId){ alert("Plotëso PUBG ID."); return; }
 
   const item   = products[key];
-  const priceEur = Number(item.price);
+  const amount = Number(item.price);
 
-  /* 1 ▸ (Opsionale) ruaje paraprakisht në Sheets përmes proxy-t tënd */
+  /* 1 ▸ Ruaje porosinë në Google Sheet (proxy) */
   fetch("https://trustuc-proxy.onrender.com/submit",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
       pubg_id : pubgId,
       paketa  : `${item.uc} UC`,
-      shuma   : priceEur
+      shuma   : amount
     })
   })
   .then(() => {
@@ -82,9 +91,9 @@ function pay(key){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({
-        playerId    : pubgId,
-        priceEur    : priceEur,
-        packageName : `${item.uc} UC`
+        playerId : pubgId,
+        ucAmount : item.uc,
+        amount
       })
     });
   })
