@@ -1,0 +1,54 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+}
+body.dark { background: #121212; color: #fff; }
+body.light { background: #f4f4f4; color: #121212; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #1a1a1a;
+}
+body.light header { background: #ddd; }
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.account-card {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+body.light .account-card { background: #fff; color: #121212; }
+
+.account-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ff0000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+body.light .btn { background: #ff4444; }
+.price { font-weight: bold; margin-top: 0.5rem; }
+
+.account-details {
+  padding: 2rem;
+  text-align: center;
+}
+.account-details img { max-width: 400px; border-radius: 10px; }
