@@ -16,26 +16,36 @@ header {
   padding: 1rem 2rem;
   background-color: #1a1a1a;
 }
-header h1 {
-  margin: 0.2rem 0;
+
+/* Top row: emri majtas, toggle djathtas */
+header .header-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .header-top h1 {
+  margin: 0;
   font-size: 2rem;
 }
-header button {
+
+header .header-top button {
   padding: 0.5rem 1rem;
   border: none;
   background: #ff0000;
   color: #fff;
   cursor: pointer;
   border-radius: 8px;
-  margin-top: 0.5rem;
 }
 
-/* Teksti lart mbi logo */
+/* Teksti Welcome poshtë header-top, në mes */
 header .top-text {
   text-align: center;
   font-size: 1rem;
   color: #ff0000;
   font-weight: bold;
+  margin-top: 0.3rem;
 }
 
 /* Hero Banner */
