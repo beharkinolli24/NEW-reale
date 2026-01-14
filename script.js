@@ -1,36 +1,63 @@
-// Dark/Light Toggle
+// ----------------------------
+// DARK / LIGHT TOGGLE
+// ----------------------------
 const themeBtn = document.getElementById('theme-toggle');
 themeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark');
   document.body.classList.toggle('light');
 });
 
-// Data e account-eve
+// ----------------------------
+// ARRAY ME ACCOUNT
+// ----------------------------
 const accountsData = [
-  { id: 1, title: "MA x DEADKILLI #01", info: "21 Mythic • 50+ Legendary • EU • Level 75", price: "€180", cover: "images/account1-cover.mp4", video: "images/account1.mp4" },
-  { id: 2, title: "MA x DEADKILLI #02", info: "18 Mythic • 40+ Legendary • NA • Level 70", price: "€150", cover: "images/account2-cover.mp4", video: "images/account2.mp4" },
-  { id: 3, title: "MA x DEADKILLI #03", info: "15 Mythic • 35+ Legendary • AS • Level 65", price: "€130", cover: "images/account3-cover.mp4", video: "images/account3.mp4" }
+  {
+    id: 1,
+    title: "MA x DEADKILLI #01",
+    info: "21 Mythic • 50+ Legendary • EU • Level 75",
+    price: "€180",
+    cover: "images/account1-cover.jpg", // screenshot ose video e shkurtër
+    video: "images/account1.mp4"       // video e plotë për modal
+  },
+  {
+    id: 2,
+    title: "MA x DEADKILLI #02",
+    info: "18 Mythic • 40+ Legendary • NA • Level 70",
+    price: "€150",
+    cover: "images/account2-cover.jpg",
+    video: "images/account2.mp4"
+  }
+  // SHTO ACCOUNT TE TJERE KETU
 ];
 
-// Gjenero HTML për secilin account
+// ----------------------------
+// GENERO CARDS AUTOMATIK
+// ----------------------------
 const grid = document.querySelector('.accounts-grid');
-accountsData.forEach(acc => {
-  const div = document.createElement('div');
-  div.classList.add('account-card');
-  div.setAttribute('data-acc', acc.id);
 
-  div.innerHTML = `
-    <video autoplay muted loop playsinline class="cover-video">
-      <source src="${acc.cover}" type="video/mp4">
-    </video>
-    <h2>${acc.title}</h2>
-    <button class="btn view-btn">View Details</button>
-  `;
+function generateCards() {
+  grid.innerHTML = ""; // pastro grid
+  accountsData.forEach(acc => {
+    const div = document.createElement('div');
+    div.classList.add('account-card');
+    div.setAttribute('data-acc', acc.id);
 
-  grid.appendChild(div);
-});
+    div.innerHTML = `
+      <img src="${acc.cover}" alt="${acc.title}" class="cover-video">
+      <h2>${acc.title}</h2>
+      <button class="btn view-btn">View Details</button>
+    `;
 
-// Modal
+    grid.appendChild(div);
+  });
+}
+
+// Fillojme gjenerimin e cards
+generateCards();
+
+// ----------------------------
+// MODAL
+// ----------------------------
 const modal = document.getElementById('account-modal');
 const modalVideo = modal.querySelector('video');
 const modalTitle = document.getElementById('modal-title');
@@ -38,20 +65,34 @@ const modalInfo = document.getElementById('modal-info');
 const modalPrice = document.getElementById('modal-price');
 const closeBtn = modal.querySelector('.close');
 
-// Open modal
+// OPEN MODAL
 grid.addEventListener('click', (e) => {
   if (e.target.classList.contains('view-btn')) {
     const accId = e.target.parentElement.getAttribute('data-acc');
     const data = accountsData.find(a => a.id == accId);
+
     modalTitle.textContent = data.title;
     modalInfo.textContent = data.info;
     modalPrice.textContent = data.price;
+
     modalVideo.querySelector('source').src = data.video;
     modalVideo.load();
+
     modal.style.display = 'block';
   }
 });
 
-// Close modal
+// CLOSE MODAL
 closeBtn.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => { if(e.target == modal) modal.style.display = 'none'; });
+window.addEventListener('click', (e) => { 
+  if (e.target == modal) modal.style.display = 'none'; 
+});
+
+// ----------------------------
+// SHTO ACCOUNT TE RI
+// Vetem shto nje objekt ne accountsData dhe thirr generateCards()
+// ----------------------------
+function addAccount(id, title, info, price, cover, video) {
+  accountsData.push({id, title, info, price, cover, video});
+  generateCards();
+}
