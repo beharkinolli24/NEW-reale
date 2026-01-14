@@ -13,7 +13,7 @@ header .top-text { text-align: center; font-size: 1rem; color: #ff0000; font-wei
 
 /* Hero Banner */
 .hero { text-align: center; margin: 1rem 0; }
-.hero .banner-img {
+.banner-img {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
