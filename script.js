@@ -1,15 +1,11 @@
-// ----------------------------
-// DARK / LIGHT TOGGLE
-// ----------------------------
+// Dark/Light Toggle
 const themeBtn = document.getElementById("theme-toggle");
 themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   document.body.classList.toggle("light");
 });
 
-// ----------------------------
-// ARRAY ME ACCOUNT
-// ----------------------------
+// Accounts Data
 const accountsData = [
   {
     id: 1,
@@ -17,7 +13,6 @@ const accountsData = [
     info: "21 Mythic • 50+ Legendary • EU • Level 75",
     price: "€180",
     cover: "images/account1-cover.jpg",
-    // **Google Drive embed link që ke**
     video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
   },
   {
@@ -38,33 +33,25 @@ const accountsData = [
   }
 ];
 
-// ----------------------------
-// GENERO CARDS AUTOMATIK
-// ----------------------------
+// Generate Cards
 const grid = document.querySelector(".accounts-grid");
-
 function generateCards() {
-  grid.innerHTML = ""; // pastro grid
+  grid.innerHTML = "";
   accountsData.forEach(acc => {
     const div = document.createElement("div");
     div.classList.add("account-card");
     div.setAttribute("data-acc", acc.id);
-
     div.innerHTML = `
       <img src="${acc.cover}" alt="${acc.title}" class="cover-video">
       <h2>${acc.title}</h2>
       <button class="btn view-btn">View Details</button>
     `;
-
     grid.appendChild(div);
   });
 }
-
 generateCards();
 
-// ----------------------------
-// MODAL
-// ----------------------------
+// Modal
 const modal = document.getElementById("account-modal");
 const modalFrame = modal.querySelector("iframe");
 const modalTitle = document.getElementById("modal-title");
@@ -72,9 +59,9 @@ const modalInfo = document.getElementById("modal-info");
 const modalPrice = document.getElementById("modal-price");
 const closeBtn = modal.querySelector(".close");
 
-// OPEN MODAL
-grid.addEventListener("click", (e) => {
-  if (e.target.classList.contains("view-btn")) {
+// Open Modal
+grid.addEventListener("click", e => {
+  if(e.target.classList.contains("view-btn")) {
     const accId = e.target.parentElement.getAttribute("data-acc");
     const data = accountsData.find(a => a.id == accId);
 
@@ -82,21 +69,18 @@ grid.addEventListener("click", (e) => {
     modalInfo.textContent = data.info;
     modalPrice.textContent = data.price;
 
-    // vendos GDrive embed në iframe
-    modalFrame.src = data.video;
-
+    modalFrame.src = data.video; // Google Drive iframe
     modal.style.display = "flex";
   }
 });
 
-// CLOSE MODAL
+// Close Modal
 closeBtn.addEventListener("click", () => {
-  modalFrame.src = ""; // ndal video
+  modalFrame.src = "";
   modal.style.display = "none";
 });
-
-window.addEventListener("click", (e) => {
-  if (e.target == modal) {
+window.addEventListener("click", e => {
+  if(e.target == modal){
     modalFrame.src = "";
     modal.style.display = "none";
   }
