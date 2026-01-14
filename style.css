@@ -8,6 +8,11 @@ body.light {
   color: #121212;
 }
 
+/* Smooth transition për Dark/Light */
+body, header, .account-card, .top-text {
+  transition: all 0.5s ease;
+}
+
 /* Header */
 header {
   display: flex;
@@ -34,11 +39,15 @@ header .header-top h1 {
 header .header-top button {
   padding: 0.5rem 1rem;
   border: none;
-  background: #ff0000;
+  background: linear-gradient(45deg, #ff0000, #8000ff);
   color: #fff;
   cursor: pointer;
   border-radius: 8px;
   margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+header .header-top button:hover {
+  transform: scale(1.05);
 }
 
 /* Teksti Welcome poshtë header-top, në mes */
@@ -85,4 +94,73 @@ header .top-text {
 }
 .account-card img {
   width: 100%;
-  he
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+}
+.account-card h2 {
+  margin: 0.5rem 0;
+}
+.account-card p {
+  margin: 0.25rem 0;
+}
+.account-card .price {
+  font-weight: bold;
+  color: #ff0000;
+}
+.account-card .btn {
+  display: inline-block;
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(45deg, #ff0000, #8000ff);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+.account-card .btn:hover {
+  transform: scale(1.05);
+}
+
+/* Dark/Light Toggle */
+body.light header {
+  background-color: #e0e0e0;
+}
+body.light .top-text {
+  color: #ff0000;
+}
+body.light .account-card {
+  background-color: #fff;
+  color: #121212;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header .header-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header .header-top button {
+    margin-top: 0.5rem;
+  }
+
+  .accounts-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header .header-top h1 {
+    font-size: 1.5rem;
+  }
+
+  header .top-text {
+    font-size: 0.9rem;
+  }
+
+  .account-card img {
+    height: 150px;
+  }
+}
