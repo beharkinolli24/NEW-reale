@@ -1,14 +1,14 @@
 // ----------------------------
 // DARK / LIGHT TOGGLE
 // ----------------------------
-const themeBtn = document.getElementById('theme-toggle');
-themeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  document.body.classList.toggle('light');
+const themeBtn = document.getElementById("theme-toggle");
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 });
 
 // ----------------------------
-// ARRAY ME ACCOUNT
+// ACCOUNT DATA
 // ----------------------------
 const accountsData = [
   {
@@ -16,8 +16,8 @@ const accountsData = [
     title: "MA x DEADKILLI #01",
     info: "21 Mythic • 50+ Legendary • EU • Level 75",
     price: "€180",
-    cover: "images/account1-cover.jpg", // screenshot ose video e shkurtër
-    video: "images/account1.mp4"       // video e plotë për modal
+    cover: "images/account1-cover.jpg",
+    video: "images/account1.mp4"
   },
   {
     id: 2,
@@ -27,72 +27,73 @@ const accountsData = [
     cover: "images/account2-cover.jpg",
     video: "images/account2.mp4"
   }
-  // SHTO ACCOUNT TE TJERE KETU
 ];
 
 // ----------------------------
-// GENERO CARDS AUTOMATIK
+// GENERATE CARDS
 // ----------------------------
-const grid = document.querySelector('.accounts-grid');
+const grid = document.querySelector(".accounts-grid");
 
 function generateCards() {
-  grid.innerHTML = ""; // pastro grid
+  grid.innerHTML = "";
   accountsData.forEach(acc => {
-    const div = document.createElement('div');
-    div.classList.add('account-card');
-    div.setAttribute('data-acc', acc.id);
+    const card = document.createElement("div");
+    card.className = "account-card";
+    card.dataset.id = acc.id;
 
-    div.innerHTML = `
-      <img src="${acc.cover}" alt="${acc.title}" class="cover-video">
+    card.innerHTML = `
+      <img src="${acc.cover}" alt="${acc.title}">
       <h2>${acc.title}</h2>
       <button class="btn view-btn">View Details</button>
     `;
 
-    grid.appendChild(div);
+    grid.appendChild(card);
   });
 }
 
-// Fillojme gjenerimin e cards
 generateCards();
 
 // ----------------------------
 // MODAL
 // ----------------------------
-const modal = document.getElementById('account-modal');
-const modalVideo = modal.querySelector('video');
-const modalTitle = document.getElementById('modal-title');
-const modalInfo = document.getElementById('modal-info');
-const modalPrice = document.getElementById('modal-price');
-const closeBtn = modal.querySelector('.close');
+const modal = document.getElementById("account-modal");
+const modalVideo = modal.querySelector("video");
+const modalTitle = document.getElementById("modal-title");
+const modalInfo = document.getElementById("modal-info");
+const modalPrice = document.getElementById("modal-price");
+const closeBtn = modal.querySelector(".close");
 
-// OPEN MODAL
-grid.addEventListener('click', (e) => {
-  if (e.target.classList.contains('view-btn')) {
-    const accId = e.target.parentElement.getAttribute('data-acc');
-    const data = accountsData.find(a => a.id == accId);
+// OPEN MODAL (STABLE VERSION)
+grid.addEventListener("click", e => {
+  if (!e.target.classList.contains("view-btn")) return;
 
-    modalTitle.textContent = data.title;
-    modalInfo.textContent = data.info;
-    modalPrice.textContent = data.price;
+  const id = e.target.parentElement.dataset.id;
+  const acc = accountsData.find(a => a.id == id);
 
-    modalVideo.querySelector('source').src = data.video;
-    modalVideo.load();
+  modalTitle.textContent = acc.title;
+  modalInfo.textContent = acc.info;
+  modalPrice.textContent = acc.price;
 
-    modal.style.display = 'block';
-  }
+  // RESET VIDEO (SHUME E RENDESISHME)
+  modalVideo.pause();
+  modalVideo.src = acc.video;
+  modalVideo.load();
+  modalVideo.play();
+
+  modal.style.display = "flex";
 });
 
 // CLOSE MODAL
-closeBtn.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => { 
-  if (e.target == modal) modal.style.display = 'none'; 
-});
+closeBtn.onclick = () => {
+  modalVideo.pause();
+  modalVideo.src = "";
+  modal.style.display = "none";
+};
 
-// ----------------------------
-// SHTO ACCOUNT TE RI
-// Vetem shto nje objekt ne accountsData dhe thirr generateCards()
-// ----------------------------
-function addAccount(id, title, info, price, cover, video) {
-  accountsData.push({id, title, info, price, cover, video});
-  generateCards();
-}
+window.onclick = e => {
+  if (e.target === modal) {
+    modalVideo.pause();
+    modalVideo.src = "";
+    modal.style.display = "none";
+  }
+};
