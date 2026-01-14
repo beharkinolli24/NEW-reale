@@ -7,30 +7,9 @@ themeBtn.addEventListener('click', () => {
 
 // ---------------- Accounts Data ----------------
 const accountsData = [
-  {
-    id: 1,
-    title: "MA x DEADKILLI #01",
-    info: "21 Mythic • 50+ Legendary • EU • Level 75",
-    price: "€180",
-    cover: "images/account1-cover.mp4",
-    video: "videos/account1.mp4"
-  },
-  {
-    id: 2,
-    title: "MA x DEADKILLI #02",
-    info: "18 Mythic • 40+ Legendary • NA • Level 70",
-    price: "€150",
-    cover: "images/account2-cover.mp4",
-    video: "videos/account2.mp4"
-  },
-  {
-    id: 3,
-    title: "MA x DEADKILLI #03",
-    info: "15 Mythic • 35+ Legendary • AS • Level 65",
-    price: "€130",
-    cover: "images/account3-cover.mp4",
-    video: "videos/account3.mp4"
-  }
+  { id: 1, title: "MA x DEADKILLI #01", info: "21 Mythic • 50+ Legendary • EU • Level 75", price: "€180", cover: "images/account1-cover.mp4", video: "videos/account1.mp4" },
+  { id: 2, title: "MA x DEADKILLI #02", info: "18 Mythic • 40+ Legendary • NA • Level 70", price: "€150", cover: "images/account2-cover.mp4", video: "videos/account2.mp4" },
+  { id: 3, title: "MA x DEADKILLI #03", info: "15 Mythic • 35+ Legendary • AS • Level 65", price: "€130", cover: "images/account3-cover.mp4", video: "videos/account3.mp4" }
 ];
 
 // ---------------- Render Accounts ----------------
@@ -57,7 +36,7 @@ const modalInfo = document.getElementById('modal-info');
 const modalPrice = document.getElementById('modal-price');
 const closeBtn = modal.querySelector('.close');
 
-grid.addEventListener('click', (e) => {
+grid.addEventListener('click', e => {
   if (e.target.classList.contains('view-btn')) {
     const accId = e.target.parentElement.getAttribute('data-acc');
     const data = accountsData.find(a => a.id == accId);
@@ -72,26 +51,20 @@ grid.addEventListener('click', (e) => {
 
 // Close modal
 closeBtn.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', e => {
-  if (e.target == modal) modal.style.display = 'none';
-});
+window.addEventListener('click', e => { if(e.target == modal) modal.style.display = 'none'; });
 
 // ---------------- Login Modal ----------------
 const loginModal = document.getElementById('login-modal');
 const phoneModal = document.getElementById('phone-modal');
 
-// Show login modal on page load if not logged in
 window.addEventListener('load', () => {
-  const user = firebase.auth().currentUser;
-  if (!user) loginModal.style.display = 'block';
+  loginModal.style.display = 'block'; // ALWAYS show login modal on page load
 });
 
-// Close buttons
 document.querySelector('.close-login').addEventListener('click', () => loginModal.style.display = 'none');
 document.querySelector('.close-phone').addEventListener('click', () => phoneModal.style.display = 'none');
 
 // ---------------- Firebase Login ----------------
-// GOOGLE LOGIN
 document.getElementById('google-login').addEventListener('click', () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
@@ -102,16 +75,13 @@ document.getElementById('google-login').addEventListener('click', () => {
     .catch(err => console.error(err));
 });
 
-// PHONE LOGIN
 document.getElementById('phone-login').addEventListener('click', () => {
   loginModal.style.display = 'none';
   phoneModal.style.display = 'block';
 });
 
-// Invisible reCAPTCHA for phone login
 window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('send-code', {'size':'invisible'});
 
-// Send verification code
 document.getElementById('send-code').addEventListener('click', () => {
   const phoneNumber = document.getElementById('phone-number').value;
   const appVerifier = window.recaptchaVerifier;
@@ -123,7 +93,6 @@ document.getElementById('send-code').addEventListener('click', () => {
     .catch(err => console.error(err));
 });
 
-// Verify code
 document.getElementById('verify-code').addEventListener('click', () => {
   const code = document.getElementById('verification-code').value;
   window.confirmationResult.confirm(code)
