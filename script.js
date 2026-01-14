@@ -10,8 +10,8 @@ const accountsData = [
   {
     id:1,
     title:"MA x DEADKILLI #01",
-    info:"21 Mythic • 50+ Legendary • EU • Level 75",
-    price:"€180",
+    info:"",
+    price:"€200",
     cover:"images/BANNER.jpg",
     driveId:"1cQawGBxGgJCk_mH3VGndwrhRPyjgEV5q",
     topSale:true
@@ -19,7 +19,7 @@ const accountsData = [
   {
     id:2,
     title:"MA x DEADKILLI #02",
-    info:"18 Mythic • 40+ Legendary • NA • Level 70",
+    info:"",
     price:"€250",
     cover:"images/BANNER.jpg",
     driveId:"1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl",
