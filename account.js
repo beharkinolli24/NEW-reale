@@ -1,50 +1,29 @@
-// Merr parametrit e URL
-const urlParams = new URLSearchParams(window.location.search);
-const accId = urlParams.get('acc');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MA x DEADKILLI Account Details</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
 
-// Data e accounts
-const accountsData = {
-  "1": {
-    name: "MA x DEADKILLI #01",
-    img: "images/account1-1.jpg",
-    info: "21 Mythic • 50+ Legendary • EU • Level 75",
-    price: "€180"
-  },
-  "2": {
-    name: "MA x DEADKILLI #02",
-    img: "images/account2-1.jpg",
-    info: "18 Mythic • 40+ Legendary • NA • Level 70",
-    price: "€150"
-  },
-  "3": {
-    name: "MA x DEADKILLI #03",
-    img: "images/account3-1.jpg",
-    info: "15 Mythic • 35+ Legendary • AS • Level 65",
-    price: "€130"
-  }
-};
+<header>
+  <h1>MA x DEADKILLI Account Details</h1>
+</header>
 
-const buyBtn = document.getElementById('buy-btn');
+<main>
+  <section class="account-detail">
+    <video controls autoplay class="detail-video">
+      <source src="images/account1.mp4" type="video/mp4">
+    </video>
 
-// Shfaq account dhe setup link për kontakt
-if (accountsData[accId]) {
-  const data = accountsData[accId];
+    <h2>MA x DEADKILLI #01</h2>
+    <p>21 Mythic • 50+ Legendary • EU • Level 75</p>
+    <p class="price">€180</p>
+    <a href="https://www.instagram.com/deadkilli.pm/" class="btn" target="_blank">Contact on Instagram</a>
+  </section>
+</main>
 
-  document.getElementById('account-img').src = data.img;
-  document.getElementById('account-name').textContent = data.name;
-  document.getElementById('account-info').textContent = data.info;
-  document.getElementById('account-price').textContent = data.price;
-
-  // Mailto link
-  const email = "beharkinolli25@gmail.com";
-  const subject = encodeURIComponent("PUBG Account Order");
-  const body = encodeURIComponent(`Hi, I want to buy ${data.name} - ${data.info} - ${data.price}`);
-  buyBtn.href = `mailto:${email}?subject=${subject}&body=${body}`;
-
-  // Opsionale WhatsApp link
-  // const waNumber = "355123456789";
-  // buyBtn.href = `https://wa.me/${waNumber}?text=${body}`;
-
-} else {
-  document.querySelector('.account-detail').innerHTML = "<p>Account not found!</p>";
-}
+</body>
+</html>
