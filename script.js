@@ -11,7 +11,7 @@ const accountsData = [
     id:1,
     title:"MA x DEADKILLI #01",
     info:"",
-    price:"€200",
+    price:"€170",
     cover:"images/BANNER.jpg",
     driveId:"1cQawGBxGgJCk_mH3VGndwrhRPyjgEV5q",
     topSale:true
