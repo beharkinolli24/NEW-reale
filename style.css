@@ -13,7 +13,14 @@ header .top-text { text-align: center; font-size: 1rem; color: #ff0000; font-wei
 
 /* Hero Banner */
 .hero { text-align: center; margin: 1rem 0; }
-.hero img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 15px; }
+.banner-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
+}
 
 /* Accounts Grid */
 .accounts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; padding: 0 2rem 2rem 2rem; }
@@ -23,28 +30,18 @@ header .top-text { text-align: center; font-size: 1rem; color: #ff0000; font-wei
 .account-card .btn { display: inline-block; margin: 0.5rem 0 1rem 0; padding: 0.5rem 1rem; background: linear-gradient(45deg, #ff0000, #8000ff); color: #fff; text-decoration: none; border-radius: 8px; transition: transform 0.2s; cursor: pointer; }
 .account-card .btn:hover { transform: scale(1.05); }
 
-/* Dark/Light */
+/* Modal */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; }
+.modal-content { background-color: #1f1f1f; margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 700px; text-align: center; position: relative; }
+.modal-content h2, .modal-content p, .modal-content .price { margin: 10px 0; color: #fff; }
+.modal-content a.btn { margin-top: 10px; }
+.close { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 30px; font-weight: bold; cursor: pointer; }
+.close:hover { color: #ff0000; }
+.detail-video { width: 100%; height: 300px; border-radius: 10px; margin-bottom: 10px; }
+
 body.light header { background-color: #e0e0e0; }
 body.light .top-text { color: #ff0000; }
 body.light .account-card { background-color: #fff; color: #121212; }
 
-/* Modal */
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
-.modal-content { background-color: #1f1f1f; margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 700px; text-align: center; position: relative; }
-.modal-content h2, .modal-content p, .modal-content .price { margin: 10px 0; color: #fff; }
-.modal-content a.btn { margin-top: 10px; }
-.close, .close-login, .close-phone { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 30px; font-weight: bold; cursor: pointer; }
-.close:hover, .close-login:hover, .close-phone:hover { color: #ff0000; }
-.detail-video { width: 100%; height: auto; border-radius: 10px; margin-bottom: 10px; }
-
-/* Login Buttons */
-.login-google, .login-phone { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0.5rem 1rem; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 0.5rem 0; transition: transform 0.2s; }
-.login-google { background-color: #fff; color: #000; border: 1px solid #ccc; }
-.login-google img { width: 20px; height: 20px; }
-.login-google:hover { transform: scale(1.05); }
-.login-phone { background-color: #007bff; color: #fff; }
-.login-phone img { width: 20px; height: 20px; }
-.login-phone:hover { transform: scale(1.05); }
-
-/* Responsive */
 @media (max-width: 768px) { .accounts-grid { grid-template-columns: 1fr; padding: 0 1rem 2rem 1rem; } }
+
