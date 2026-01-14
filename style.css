@@ -11,13 +11,14 @@ body.light {
 /* Header */
 header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #1a1a1a;
 }
 header h1 {
-  margin: 0;
+  margin: 0.2rem 0;
+  font-size: 2rem;
 }
 header button {
   padding: 0.5rem 1rem;
@@ -26,6 +27,15 @@ header button {
   color: #fff;
   cursor: pointer;
   border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+/* Teksti lart mbi logo */
+header .top-text {
+  text-align: center;
+  font-size: 1rem;
+  color: #ff0000;
+  font-weight: bold;
 }
 
 /* Hero Banner */
@@ -39,15 +49,6 @@ header button {
   max-height: 400px;
   object-fit: cover;
   border-radius: 15px;
-}
-.hero h1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: #fff;
-  text-shadow: 2px 2px 6px #000;
 }
 
 /* Accounts Grid */
@@ -102,6 +103,9 @@ header button {
 /* Dark/Light Toggle */
 body.light header {
   background-color: #e0e0e0;
+}
+body.light .top-text {
+  color: #ff0000;
 }
 body.light .account-card {
   background-color: #fff;
