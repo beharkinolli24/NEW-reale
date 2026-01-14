@@ -7,9 +7,33 @@ themeBtn.addEventListener('click',()=>{
 
 // Data accounts
 const accountsData=[
-  {id:1,title:"MA x DEADKILLI #01",info:"21 Mythic • 50+ Legendary • EU • Level 75",price:"€180",coverVideo:"https://drive.google.com/file/d/18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5/preview",driveId:"18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5",topSale:true},
-  {id:2,title:"MA x DEADKILLI #02",info:"18 Mythic • 40+ Legendary • NA • Level 70",price:"€150",coverVideo:"images/account2-cover.jpg",driveId:"1Y2EXAMPLEID2",topSale:false},
-  {id:3,title:"MA x DEADKILLI #03",info:"15 Mythic • 35+ Legendary • AS • Level 65",price:"€130",coverVideo:"images/account3-cover.jpg",driveId:"1Y3EXAMPLEID3",topSale:false}
+  {
+    id:1,
+    title:"MA x DEADKILLI #01",
+    info:"21 Mythic • 50+ Legendary • EU • Level 75",
+    price:"€180",
+    thumbnail:"images/account1-thumb.jpg",  // vendos screenshot këtu
+    driveId:"18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5",
+    topSale:true
+  },
+  {
+    id:2,
+    title:"MA x DEADKILLI #02",
+    info:"18 Mythic • 40+ Legendary • NA • Level 70",
+    price:"€150",
+    thumbnail:"images/account2-thumb.jpg",
+    driveId:"1Y2EXAMPLEID2",
+    topSale:false
+  },
+  {
+    id:3,
+    title:"MA x DEADKILLI #03",
+    info:"15 Mythic • 35+ Legendary • AS • Level 65",
+    price:"€130",
+    thumbnail:"images/account3-thumb.jpg",
+    driveId:"1Y3EXAMPLEID3",
+    topSale:false
+  }
 ];
 
 // Gjenero cards
@@ -21,9 +45,7 @@ accountsData.forEach(acc=>{
 
   div.innerHTML=`
     ${acc.topSale?'<div class="top-sale">Top Sale</div>':''}
-    <video class="cover-video" autoplay muted loop playsinline>
-      <source src="${acc.coverVideo}" type="video/mp4">
-    </video>
+    <img src="${acc.thumbnail}" alt="${acc.title}">
     <h2>${acc.title}</h2>
     <button class="btn view-btn">View Details</button>
   `;
