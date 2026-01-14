@@ -1,104 +1,87 @@
-// ---------------- Dark/Light Toggle ----------------
-const themeBtn = document.getElementById('theme-toggle');
-themeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  document.body.classList.toggle('light');
+// Dark/Light Toggle
+const themeBtn = document.getElementById("theme-toggle");
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
 });
 
-// ---------------- Accounts Data ----------------
+// Accounts Data
 const accountsData = [
-  { id: 1, title: "MA x DEADKILLI #01", info: "21 Mythic • 50+ Legendary • EU • Level 75", price: "€180", cover: "images/account1-cover.mp4", video: "videos/account1.mp4" },
-  { id: 2, title: "MA x DEADKILLI #02", info: "18 Mythic • 40+ Legendary • NA • Level 70", price: "€150", cover: "images/account2-cover.mp4", video: "videos/account2.mp4" },
-  { id: 3, title: "MA x DEADKILLI #03", info: "15 Mythic • 35+ Legendary • AS • Level 65", price: "€130", cover: "images/account3-cover.mp4", video: "videos/account3.mp4" }
+  {
+    id: 1,
+    title: "MA x DEADKILLI #01",
+    info: "21 Mythic • 50+ Legendary • EU • Level 75",
+    price: "€180",
+    cover: "images/account1-cover.jpg",
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
+  },
+  {
+    id: 2,
+    title: "MA x DEADKILLI #02",
+    info: "18 Mythic • 40+ Legendary • NA • Level 70",
+    price: "€150",
+    cover: "images/account2-cover.jpg",
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
+  },
+  {
+    id: 3,
+    title: "MA x DEADKILLI #03",
+    info: "15 Mythic • 35+ Legendary • AS • Level 65",
+    price: "€130",
+    cover: "images/account3-cover.jpg",
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
+  }
 ];
 
-// ---------------- Render Accounts ----------------
-const grid = document.querySelector('.accounts-grid');
-accountsData.forEach(acc => {
-  const div = document.createElement('div');
-  div.classList.add('account-card');
-  div.setAttribute('data-acc', acc.id);
-  div.innerHTML = `
-    <video autoplay muted loop playsinline class="cover-video">
-      <source src="${acc.cover}" type="video/mp4">
-    </video>
-    <h2>${acc.title}</h2>
-    <button class="btn view-btn">View Details</button>
-  `;
-  grid.appendChild(div);
-});
+// Generate Cards
+const grid = document.querySelector(".accounts-grid");
+function generateCards() {
+  grid.innerHTML = "";
+  accountsData.forEach(acc => {
+    const div = document.createElement("div");
+    div.classList.add("account-card");
+    div.setAttribute("data-acc", acc.id);
+    div.innerHTML = `
+      <img src="${acc.cover}" alt="${acc.title}" class="cover-video">
+      <h2>${acc.title}</h2>
+      <button class="btn view-btn">View Details</button>
+    `;
+    grid.appendChild(div);
+  });
+}
+generateCards();
 
-// ---------------- Modal Account Details ----------------
-const modal = document.getElementById('account-modal');
-const modalVideo = modal.querySelector('video');
-const modalTitle = document.getElementById('modal-title');
-const modalInfo = document.getElementById('modal-info');
-const modalPrice = document.getElementById('modal-price');
-const closeBtn = modal.querySelector('.close');
+// Modal
+const modal = document.getElementById("account-modal");
+const modalFrame = modal.querySelector("iframe");
+const modalTitle = document.getElementById("modal-title");
+const modalInfo = document.getElementById("modal-info");
+const modalPrice = document.getElementById("modal-price");
+const closeBtn = modal.querySelector(".close");
 
-grid.addEventListener('click', e => {
-  if (e.target.classList.contains('view-btn')) {
-    const accId = e.target.parentElement.getAttribute('data-acc');
+// Open Modal
+grid.addEventListener("click", e => {
+  if(e.target.classList.contains("view-btn")) {
+    const accId = e.target.parentElement.getAttribute("data-acc");
     const data = accountsData.find(a => a.id == accId);
+
     modalTitle.textContent = data.title;
     modalInfo.textContent = data.info;
     modalPrice.textContent = data.price;
-    modalVideo.querySelector('source').src = data.video;
-    modalVideo.load();
-    modal.style.display = 'block';
+
+    modalFrame.src = data.video; // Google Drive iframe
+    modal.style.display = "flex";
   }
 });
 
-// Close modal
-closeBtn.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', e => { if(e.target == modal) modal.style.display = 'none'; });
-
-// ---------------- Login Modal ----------------
-const loginModal = document.getElementById('login-modal');
-const phoneModal = document.getElementById('phone-modal');
-
-window.addEventListener('load', () => {
-  loginModal.style.display = 'block'; // ALWAYS show login modal on page load
+// Close Modal
+closeBtn.addEventListener("click", () => {
+  modalFrame.src = "";
+  modal.style.display = "none";
 });
-
-document.querySelector('.close-login').addEventListener('click', () => loginModal.style.display = 'none');
-document.querySelector('.close-phone').addEventListener('click', () => phoneModal.style.display = 'none');
-
-// ---------------- Firebase Login ----------------
-document.getElementById('google-login').addEventListener('click', () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(result => {
-      alert("Logged in as: " + result.user.displayName);
-      loginModal.style.display = 'none';
-    })
-    .catch(err => console.error(err));
-});
-
-document.getElementById('phone-login').addEventListener('click', () => {
-  loginModal.style.display = 'none';
-  phoneModal.style.display = 'block';
-});
-
-window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('send-code', {'size':'invisible'});
-
-document.getElementById('send-code').addEventListener('click', () => {
-  const phoneNumber = document.getElementById('phone-number').value;
-  const appVerifier = window.recaptchaVerifier;
-  firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-    .then(confirmationResult => {
-      window.confirmationResult = confirmationResult;
-      alert("Code sent to phone!");
-    })
-    .catch(err => console.error(err));
-});
-
-document.getElementById('verify-code').addEventListener('click', () => {
-  const code = document.getElementById('verification-code').value;
-  window.confirmationResult.confirm(code)
-    .then(result => {
-      alert("Logged in as: " + result.user.phoneNumber);
-      phoneModal.style.display = 'none';
-    })
-    .catch(err => console.error(err));
+window.addEventListener("click", e => {
+  if(e.target == modal){
+    modalFrame.src = "";
+    modal.style.display = "none";
+  }
 });
