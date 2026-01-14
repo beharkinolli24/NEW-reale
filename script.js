@@ -10,8 +10,8 @@ const accountsData=[
   {
     id:1,
     title:"MA x DEADKILLI #01",
-    info:"21 Mythic • 50+ Legendary • EU • Level 75",
-    price:"€180",
+    info:"",
+    price:"€250",
     cover:"images/BANNER.jpg",  // cover mbetet logo/banner
     driveId:"18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5",
     topSale:true
@@ -21,7 +21,7 @@ const accountsData=[
     title:"MA x DEADKILLI #02",
     info:"18 Mythic • 40+ Legendary • NA • Level 70",
     price:"€150",
-    cover:"images/account2-thumb.jpg",
+    cover:"images/BANNER.jpg",
     driveId:"1Y2EXAMPLEID2",
     topSale:false
   },
@@ -30,7 +30,7 @@ const accountsData=[
     title:"MA x DEADKILLI #03",
     info:"15 Mythic • 35+ Legendary • AS • Level 65",
     price:"€130",
-    cover:"images/account3-thumb.jpg",
+    cover:"images/BANNER.jpg",
     driveId:"1Y3EXAMPLEID3",
     topSale:false
   }
