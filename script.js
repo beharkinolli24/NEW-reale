@@ -8,7 +8,7 @@ themeBtn.addEventListener("click", () => {
 });
 
 // ----------------------------
-// ACCOUNT DATA
+// ARRAY ME ACCOUNT
 // ----------------------------
 const accountsData = [
   {
@@ -17,7 +17,8 @@ const accountsData = [
     info: "21 Mythic • 50+ Legendary • EU • Level 75",
     price: "€180",
     cover: "images/account1-cover.jpg",
-    video: "images/account1.mp4"
+    // **Google Drive embed link që ke**
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
   },
   {
     id: 2,
@@ -25,29 +26,37 @@ const accountsData = [
     info: "18 Mythic • 40+ Legendary • NA • Level 70",
     price: "€150",
     cover: "images/account2-cover.jpg",
-    video: "images/account2.mp4"
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
+  },
+  {
+    id: 3,
+    title: "MA x DEADKILLI #03",
+    info: "15 Mythic • 35+ Legendary • AS • Level 65",
+    price: "€130",
+    cover: "images/account3-cover.jpg",
+    video: "https://drive.google.com/file/d/1W_2ptZf4myj8b0cmYhyrb-Ml9X5-_8Fl/preview"
   }
 ];
 
 // ----------------------------
-// GENERATE CARDS
+// GENERO CARDS AUTOMATIK
 // ----------------------------
 const grid = document.querySelector(".accounts-grid");
 
 function generateCards() {
-  grid.innerHTML = "";
+  grid.innerHTML = ""; // pastro grid
   accountsData.forEach(acc => {
-    const card = document.createElement("div");
-    card.className = "account-card";
-    card.dataset.id = acc.id;
+    const div = document.createElement("div");
+    div.classList.add("account-card");
+    div.setAttribute("data-acc", acc.id);
 
-    card.innerHTML = `
-      <img src="${acc.cover}" alt="${acc.title}">
+    div.innerHTML = `
+      <img src="${acc.cover}" alt="${acc.title}" class="cover-video">
       <h2>${acc.title}</h2>
       <button class="btn view-btn">View Details</button>
     `;
 
-    grid.appendChild(card);
+    grid.appendChild(div);
   });
 }
 
@@ -57,43 +66,38 @@ generateCards();
 // MODAL
 // ----------------------------
 const modal = document.getElementById("account-modal");
-const modalVideo = modal.querySelector("video");
+const modalFrame = modal.querySelector("iframe");
 const modalTitle = document.getElementById("modal-title");
 const modalInfo = document.getElementById("modal-info");
 const modalPrice = document.getElementById("modal-price");
 const closeBtn = modal.querySelector(".close");
 
-// OPEN MODAL (STABLE VERSION)
-grid.addEventListener("click", e => {
-  if (!e.target.classList.contains("view-btn")) return;
+// OPEN MODAL
+grid.addEventListener("click", (e) => {
+  if (e.target.classList.contains("view-btn")) {
+    const accId = e.target.parentElement.getAttribute("data-acc");
+    const data = accountsData.find(a => a.id == accId);
 
-  const id = e.target.parentElement.dataset.id;
-  const acc = accountsData.find(a => a.id == id);
+    modalTitle.textContent = data.title;
+    modalInfo.textContent = data.info;
+    modalPrice.textContent = data.price;
 
-  modalTitle.textContent = acc.title;
-  modalInfo.textContent = acc.info;
-  modalPrice.textContent = acc.price;
+    // vendos GDrive embed në iframe
+    modalFrame.src = data.video;
 
-  // RESET VIDEO (SHUME E RENDESISHME)
-  modalVideo.pause();
-  modalVideo.src = acc.video;
-  modalVideo.load();
-  modalVideo.play();
-
-  modal.style.display = "flex";
+    modal.style.display = "flex";
+  }
 });
 
 // CLOSE MODAL
-closeBtn.onclick = () => {
-  modalVideo.pause();
-  modalVideo.src = "";
+closeBtn.addEventListener("click", () => {
+  modalFrame.src = ""; // ndal video
   modal.style.display = "none";
-};
+});
 
-window.onclick = e => {
-  if (e.target === modal) {
-    modalVideo.pause();
-    modalVideo.src = "";
+window.addEventListener("click", (e) => {
+  if (e.target == modal) {
+    modalFrame.src = "";
     modal.style.display = "none";
   }
-};
+});
