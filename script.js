@@ -28,10 +28,10 @@ const accountsData = [
   {
     id:3,
     title:"MA x DEADKILLI #03",
-    info:"15 Mythic • 35+ Legendary • AS • Level 65",
-    price:"€130",
-    cover:"images/account3-thumb.jpg",
-    driveId:"1Y3EXAMPLEID3",
+    info:"",
+    price:"€200",
+    cover:"images/BANNER.jpg",
+    driveId:"1-rOaAMI7R42423TTe5x_0-ZLyeKWODgL",
     topSale:false
   }
 ];
