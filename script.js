@@ -12,21 +12,24 @@ const accountsData = [
     title: "MA x DEADKILLI #01",
     info: "21 Mythic • 50+ Legendary • EU • Level 75",
     price: "€180",
-    driveId: "18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5" // Google Drive ID
+    cover: "images/account1-cover.jpg", // COVER i veçantë
+    driveId: "18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5" // Video embed
   },
   {
     id: 2,
     title: "MA x DEADKILLI #02",
     info: "18 Mythic • 40+ Legendary • NA • Level 70",
     price: "€150",
-    driveId: "1Y2EXAMPLEID2" // Shto Drive ID për videon #2
+    cover: "images/account2-cover.jpg",
+    driveId: "1Y2EXAMPLEID2"
   },
   {
     id: 3,
     title: "MA x DEADKILLI #03",
     info: "15 Mythic • 35+ Legendary • AS • Level 65",
     price: "€130",
-    driveId: "1Y3EXAMPLEID3" // Shto Drive ID për videon #3
+    cover: "images/account3-cover.jpg",
+    driveId: "1Y3EXAMPLEID3"
   }
 ];
 
@@ -38,7 +41,7 @@ accountsData.forEach(acc => {
   div.setAttribute('data-acc', acc.id);
 
   div.innerHTML = `
-    <img src="images/BANNER.jpg" alt="${acc.title}" class="cover-img">
+    <img src="${acc.cover}" alt="${acc.title}" class="cover-img">
     <h2>${acc.title}</h2>
     <button class="btn view-btn">View Details</button>
   `;
@@ -74,3 +77,4 @@ grid.addEventListener('click', (e) => {
 // Close modal
 closeBtn.addEventListener('click', () => modal.style.display = 'none');
 window.addEventListener('click', (e) => { if(e.target == modal) modal.style.display = 'none'; });
+
