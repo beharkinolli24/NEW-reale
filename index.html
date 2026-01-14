@@ -13,30 +13,62 @@
     <h1>MA x DEADKILLI</h1>
     <button id="theme-toggle">Toggle Dark/Light</button>
   </div>
-  <div class="top-text">Welcome to website</div>
+  <div class="top-text">Welcome to our website</div>
+  <div class="login-buttons">
+    <button id="google-login">Login with Google</button>
+    <button id="phone-login">Login with Phone</button>
+  </div>
 </header>
 
-<!-- HERO BANNER -->
-<section class="hero">
-  <img src="images/BANNER.jpg" alt="MA x DEADKILLI Banner" class="banner-img">
-</section>
+<div class="hero">
+  <img src="images/BANNER.jpg" alt="Banner MA x DEADKILLI">
+</div>
 
 <main>
   <section class="accounts-grid">
-    <!-- Cards gjenerohen automatikisht nga script.js -->
+    <!-- Accounts do shtohen me JS -->
   </section>
 </main>
 
-<!-- MODAL -->
+<!-- Modal -->
 <div id="account-modal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2 id="modal-title"></h2>
     <p id="modal-info"></p>
-    <p id="modal-price"></p>
-    <iframe class="detail-video" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+    <p class="price" id="modal-price"></p>
+    <video controls class="detail-video">
+      <source src="" type="video/mp4">
+    </video>
   </div>
 </div>
+
+<!-- Phone login modal -->
+<div id="phone-modal" style="display:none;">
+  <input type="text" id="phone-number" placeholder="+38344123456">
+  <button id="send-code">Send Code</button>
+  <input type="text" id="verification-code" placeholder="Code">
+  <button id="verify-code">Verify</button>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCmDDrmYt6f0NsGlzzdOSCtM3L3m8WuUIM",
+    authDomain: "deadkilli-store.firebaseapp.com",
+    projectId: "deadkilli-store",
+    storageBucket: "deadkilli-store.firebasestorage.app",
+    messagingSenderId: "116422534566",
+    appId: "1:116422534566:web:7322e0d1b20d3f39d8db67",
+    measurementId: "G-5K0HDH5NBB"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
 
 <script src="script.js"></script>
 </body>
