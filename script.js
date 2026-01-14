@@ -12,7 +12,7 @@ const accountsData=[
     title:"MA x DEADKILLI #01",
     info:"21 Mythic • 50+ Legendary • EU • Level 75",
     price:"€180",
-    thumbnail:"images/account1-thumb.jpg",  // vendos screenshot këtu
+    cover:"images/BANNER.jpg",  // cover mbetet logo/banner
     driveId:"18L8lWZVPSI6cTYOMhHirqQiKVfiAnSG5",
     topSale:true
   },
@@ -21,7 +21,7 @@ const accountsData=[
     title:"MA x DEADKILLI #02",
     info:"18 Mythic • 40+ Legendary • NA • Level 70",
     price:"€150",
-    thumbnail:"images/account2-thumb.jpg",
+    cover:"images/account2-thumb.jpg",
     driveId:"1Y2EXAMPLEID2",
     topSale:false
   },
@@ -30,13 +30,13 @@ const accountsData=[
     title:"MA x DEADKILLI #03",
     info:"15 Mythic • 35+ Legendary • AS • Level 65",
     price:"€130",
-    thumbnail:"images/account3-thumb.jpg",
+    cover:"images/account3-thumb.jpg",
     driveId:"1Y3EXAMPLEID3",
     topSale:false
   }
 ];
 
-// Gjenero cards
+// Gjenero cards me cover (logo/foto)
 const grid=document.querySelector('.accounts-grid');
 accountsData.forEach(acc=>{
   const div=document.createElement('div');
@@ -45,14 +45,14 @@ accountsData.forEach(acc=>{
 
   div.innerHTML=`
     ${acc.topSale?'<div class="top-sale">Top Sale</div>':''}
-    <img src="${acc.thumbnail}" alt="${acc.title}">
+    <img src="${acc.cover}" alt="${acc.title}">
     <h2>${acc.title}</h2>
     <button class="btn view-btn">View Details</button>
   `;
   grid.appendChild(div);
 });
 
-// Modal
+// Modal (video nga Drive)
 const modal=document.getElementById('account-modal');
 const modalVideo=document.getElementById('modal-video');
 const modalTitle=document.getElementById('modal-title');
@@ -67,6 +67,7 @@ grid.addEventListener('click',(e)=>{
     modalTitle.textContent=data.title;
     modalInfo.textContent=data.info;
     modalPrice.textContent=data.price;
+    // video hapet në modal vetëm
     modalVideo.src=`https://drive.google.com/file/d/${data.driveId}/preview`;
     modal.style.display='block';
   }
